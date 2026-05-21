@@ -1,0 +1,84 @@
+header{
+    width: 100%;
+    height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 20px;
+
+    position: fixed;
+    top: 0;
+
+    background: rgba(30,22,18,0.95);
+    backdrop-filter: blur(10px);
+
+    z-index: 999;
+}
+
+.logo-area{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo img{
+    width: 64px;
+
+    transition: 0.4s;
+
+    filter:
+    drop-shadow(0 0 4px rgba(232,220,198,0.35))
+    drop-shadow(0 0 10px rgba(198,156,109,0.45))
+    drop-shadow(0 0 18px rgba(198,156,109,0.35));
+}
+
+.logo img:hover{
+    transform: scale(1.05);
+
+    filter:
+    drop-shadow(0 0 6px rgba(232,220,198,0.55))
+    drop-shadow(0 0 14px rgba(198,156,109,0.7))
+    drop-shadow(0 0 28px rgba(198,156,109,0.5));
+}
+
+.logo-area h1{
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    line-height: 1;
+}
+
+.logo-area p{
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #C9B29B;
+    margin-top: 6px;
+    letter-spacing: 1px;
+}
+
+.login-btn{
+    font-family: 'Lato', sans-serif;
+
+    font-weight: 400;
+
+    letter-spacing: 1px;
+    padding: 12px 28px;
+
+    border: 1px solid #C69C6D;
+    background: transparent;
+
+    color: #C69C6D;
+
+    border-radius: 40px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.login-btn:hover{
+    background-color: #C69C6D;
+    color: #E8DCC6;
+}

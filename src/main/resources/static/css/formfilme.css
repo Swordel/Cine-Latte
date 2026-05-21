@@ -1,0 +1,138 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    padding-top: 90px;
+}
+
+.form-wrapper {
+    max-width: 700px;
+    margin: 48px auto;
+    padding: 0 24px;
+}
+ 
+.form-title {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: #F5EBDD;
+    margin-bottom: 28px;
+    text-align: center;
+}
+ 
+.form-card {
+    background: rgba(75, 54, 33, 0.18);
+    border: 1px solid rgba(198, 156, 109, 0.15);
+    border-radius: 16px;
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+ 
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+ 
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+ 
+label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C9B29B;
+    text-transform: uppercase;
+}
+ 
+input, textarea, select {
+    background: rgba(30, 22, 18, 0.6);
+    border: 1px solid rgba(198, 156, 109, 0.25);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: #F5EBDD;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.3s;
+    width: 100%;
+}
+ 
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #C69C6D;
+}
+ 
+input::placeholder, textarea::placeholder {
+    color: rgba(201, 178, 155, 0.4);
+}
+ 
+select option {
+    background: #2a1f18;
+}
+ 
+textarea {
+    resize: vertical;
+}
+
+/* Checkboxes de gênero */
+.checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+ 
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: #C9B29B;
+    cursor: pointer;
+    text-transform: none;
+    background: rgba(30, 22, 18, 0.5);
+    border: 1px solid rgba(198, 156, 109, 0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    transition: 0.2s;
+}
+ 
+.checkbox-item:hover {
+    border-color: #C69C6D;
+    color: #F5EBDD;
+}
+ 
+.checkbox-item input[type="checkbox"] {
+    width: auto;
+    accent-color: #C69C6D;
+    cursor: pointer;
+}
+
+.submit-btn {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 13px;
+    padding: 16px;
+    background: #C69C6D;
+    color: #1E1612;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 8px;
+}
+ 
+.submit-btn:hover {
+    background: #C69C6D;
+}

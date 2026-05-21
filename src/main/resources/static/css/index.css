@@ -1,0 +1,767 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    overflow-x: hidden;
+}
+
+.hero-carousel {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 90px); /* desconta exatamente a altura do header fixo, 
+    então o carrossel vai ocupar o restante visível da tela sem precisar rolar a pág */
+    margin-top: 90px;
+    overflow: hidden;
+}
+ 
+.hero-track {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+ 
+.hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+    cursor: pointer;
+}
+ 
+.hero-slide.active {
+    opacity: 1;
+}
+ 
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(30, 22, 18, 0.72) 0%,
+        rgba(30, 22, 18, 0.15) 60%,
+        rgba(30, 22, 18, 0.0) 100%
+    );
+}
+ 
+/* gradiente na parte inferior pro texto ficar legível :D */
+.hero-slide::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 220px;
+    background: linear-gradient(to top, rgba(30,22,18,0.85), transparent);
+}
+ 
+.hero-info {
+    position: absolute;
+    bottom: 80px;
+    left: 60px;
+    z-index: 2;
+}
+ 
+.hero-info h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 38px;
+    letter-spacing: 2px;
+    color: #F5EBDD;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+ 
+.hero-info p {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #C9B29B;
+    letter-spacing: 2px;
+    margin-top: 8px;
+}
+
+.movie-logo {
+    width: 220px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.hero-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(30,22,18,0.55);
+    border: 1px solid rgba(198,156,109,0.3);
+    color: #F5EBDD;
+    font-size: 36px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+ 
+.hero-btn:hover {
+    background: rgba(198,156,109,0.5);
+    border-color: #C69C6D;
+}
+ 
+.hero-btn-prev { left: 24px; }
+.hero-btn-next { right: 24px; }
+ 
+/* As bolotinhas que ficam embaixo do carrossel */
+.hero-dots {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(245,235,221,0.35);
+    cursor: pointer;
+    transition: 0.3s;
+}
+ 
+.dot.active {
+    background: #C69C6D;
+    transform: scale(1.3);
+}
+
+/* ── MOVIES SECTIONS (Em Cartaz / Em Breve) ───────────────── */
+
+.movies-section {
+    padding: 48px 0px 32px;
+}
+
+.section-title {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    color: #F5EBDD;
+    padding: 0 48px;
+    margin-bottom: 20px; 
+}
+
+.movies-row-wrapper{  /* Wrapper que contém setas + track */
+    position: relative;
+    display: flex;
+    align-items: stretch;
+}
+
+/* Faixas escuras nas laterais — invisíveis por padrão */
+.movies-row-wrapper::before,
+.movies-row-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 100px;
+    height: 100%;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.movies-row-wrapper::before {
+    left: 0;
+    background: linear-gradient(to right, rgba(30, 22, 18, 0.98), transparent);
+}
+
+.movies-row-wrapper::after {
+    right: 0;
+    background: linear-gradient(to left, rgba(30, 22, 18, 0.98), transparent);
+}
+
+/*
+ * Lateral esquerda: só aparece quando a seção tem scroll > 0.
+ * Lateral direita: só aparece quando ainda há conteúdo à direita.
+ * O JS adiciona/remove as classes "can-prev" e "can-next" no wrapper.
+ */
+.movies-row-wrapper.can-prev:hover::before { opacity: 1; }
+.movies-row-wrapper.can-next:hover::after  { opacity: 1; }
+
+/* Setas laterais — invisíveis por padrão */
+.side-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #A6B59F;
+    font-size: 48px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);    
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.3s;
+    z-index: 10;
+    line-height: 1;
+    padding-bottom: 2px;
+}
+
+
+
+.side-btn-prev { left: 12px; }
+.side-btn-next { right: 12px; }
+
+/* Seta esquerda: aparece no hover apenas quando pode voltar */
+.movies-row-wrapper.can-prev:hover .side-btn-prev { opacity: 1; }
+
+/* Seta direita: aparece no hover apenas quando pode avançar */
+.movies-row-wrapper.can-next:hover .side-btn-next { opacity: 1; }
+
+
+/* Track de filmes */
+.movies-track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 48px 16px;
+    scrollbar-width: none;
+    flex: 1;
+}
+ 
+.movies-track::-webkit-scrollbar {  /*entender esse */
+    display: none; 
+}
+
+/* Card de filme */
+.movie-card {
+    flex: 0 0 200px;
+    text-decoration: none;
+    color: #E8DCC6;
+    transition: transform 0.3s;
+
+    /* Transforma o card em um container flex vertical. Isso significa que os filhos (.movie-poster e .movie-info) 
+    se empilham de cima pra baixo, e o card passa a controlar a distribuição de espaço entre eles. */
+    display: flex; 
+    flex-direction: column;
+}
+
+.movie-card:hover {
+    transform: scale(1.04);
+}
+
+.movie-poster {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.movie-poster img {
+    width: 100%;
+    height: 290px;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-rating {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(30, 22, 18, 0.78);
+    color: #C69C6D;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 5px;
+}
+
+.movie-info {
+    font-family: 'Lato', sans-serif;
+    padding: 10px 2px 4px;
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* O flex: 1 -> diz que o .movie-info deve ocupar todo o espaço restante do card 
+                após o pôster. Ou seja, se um card tem 400px e o pôster ocupa 290px, 
+                o .movie-info vai ocupar os 110px restantes —> independente do conteúdo.*/
+}
+
+.movie-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #E8DCC6;
+    letter-spacing: 0.3px;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    
+    font-size: 11px;
+    color: #A6B59F;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+.cls-badge {
+    background: #e8a020;
+    color: white;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    line-height: 1.4;
+}
+
+.cls-livre {
+    background: #4caf50;
+}
+
+.cls-maior {
+    background: black;
+    border: 1px solid white;
+}
+
+.release-date {
+    display: inline-block;
+    background: #7A8B74;
+    color: white;
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-size: 12px;     /*to-do: depois alinhar ao centro */
+}
+
+/* ── SEÇÃO CAFÉ ─────────────────────────────────────────────── */
+
+.cl-cafe {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+}
+
+/* Fumaça de cima — funde com seção de filmes */
+.cafe-hero-wrap {
+    position: relative;
+}
+
+.cafe-hero-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, #1E1612 0%, transparent 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cafe-hero {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background:
+        linear-gradient(to right, rgba(30,22,18,0.82) 38%, rgba(30,22,18,0.1) 100%),
+        url('../images/cafe-hero.png') center/cover no-repeat;
+    clip-path: ellipse(75% 100% at 50% 0%);
+    display: flex;
+    align-items: center;
+    padding: 0 60px 60px 170px;
+}
+
+.cafe-hero-text {
+    max-width: 500px;
+    position: relative;
+    z-index: 3;
+}
+
+.cafe-eyebrow {
+    font-family: "Corinthia", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 30px;
+    letter-spacing: 1px;
+    color: #A6B59F;
+    margin-bottom: 2px;
+}
+
+.cafe-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 1px;
+    line-height: 1.3;
+    margin-bottom: 14px;
+}
+
+.cafe-hero-title em {
+    font-style: normal;
+    color: #C69C6D;
+}
+
+.cafe-hero-sub {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    color: #C9B29B;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin-bottom: 26px;
+}
+
+.cafe-btn {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C69C6D;
+    border: 1px solid #C69C6D;
+    padding: 11px 30px;
+    border-radius: 40px;
+    text-decoration: none;
+    background: transparent;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.cafe-btn:hover {
+    background: #C69C6D;
+    color: #1E1612;
+}
+
+/* ── SEÇÃO INFERIOR ── */
+
+.cafe-bottom {
+    position: relative;
+    background: #1E1612;
+    padding: 56px 48px 60px;
+    overflow: hidden;
+}
+
+
+
+/* 3 pilares */
+.cafe-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 2;
+}
+
+.cafe-pillar {
+    text-align: center;
+    padding: 8px 24px;
+    border-right: 1px solid rgba(198,156,109,0.15);
+}
+
+.cafe-pillar:last-child {
+    border-right: none;
+}
+
+.pillar-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto 12px;
+    opacity: 0.85;
+}
+
+.pillar-title {
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 2.5px;
+    color: #F5EBDD;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.pillar-desc {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #C9B29B;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+}
+
+.cafe-picks-header {
+    text-align: center;
+    margin-bottom: 36;
+    position: relative; /*deixando isso aqui */
+    z-index: 2;             /*caso eu volte com a planta no fundo*/
+}
+
+.cafe-picks-eyebrow {
+    font-family: "Corinthia", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 25px;
+    color: #C69C6D;
+    margin-bottom: 1px;
+}
+
+.cafe-picks-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 25px;
+    font-weight: 300;
+    color: #F5EBDD;
+    letter-spacing: 1px;
+}
+
+.cafe-picks-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.cafe-picks-divider span {
+    display: block;
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(198,156,109,0.5));
+}
+
+.cafe-picks-divider span:last-child {
+    background: linear-gradient(to left, transparent, rgba(198,156,109,0.5));
+}
+
+.diamond {
+    color: #C69C6D;
+    font-size: 10px;
+    font-style: normal;
+}
+
+
+/* 4 cards de bebida */
+.cafe-drinks-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 220px);
+    gap: 25px;
+    position: relative;
+    z-index: 2;
+    justify-content: center; /* centraliza os cards na tela */
+}
+
+.drink-card {
+    background: rgba(40,28,20,0.7);
+    border: 1px solid rgba(198,156,109,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+.drink-card:hover {
+    border-color: rgba(198,156,109,0.4);
+    transform: translateY(-3px);
+}
+
+.drink-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+      
+}
+
+.drink-info {
+    padding: 14px 16px 16px;
+    border-top: 1px solid rgba(198,156,109,0.12);
+}
+
+.drink-name {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #F5EBDD;
+    margin-bottom: 4px;
+}
+
+.drink-price {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #C69C6D;
+    letter-spacing: 0.5px;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+footer {
+    border-top: 1px solid rgba(198,156,109,0.15);
+    padding: 48px 100px 0;
+    font-family: 'Lato', sans-serif;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+    gap: 0px;
+    padding-bottom: 40px;
+}
+
+.footer-col {
+    padding: 0 40px;
+    border-right: 1px solid rgba(198,156,109,0.15);
+    text-align: left;
+}
+
+.footer-col:last-child {
+    border-right: none;
+}
+
+.footer-col-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: #F5EBDD;
+    margin-bottom: 16px;
+}
+
+.footer-col-desc {
+    font-size: 13px;
+    color: #C9B29B;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+.footer-email {
+    display: flex;
+    align-items: center;
+    background: rgba(75,54,33,0.3);
+    border: 1px solid rgba(198,156,109,0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    width: fit-content; 
+}
+
+.footer-email input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 14px;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #F5EBDD;
+    width: 180px;
+}
+
+.footer-email input::placeholder {
+    color: #C9B29B;
+}
+
+.footer-email button {
+    background: #C69C6D;
+    border: none;
+    color: #1E1612;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.footer-email button:hover {
+    background: #E8DCC6;
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: #C9B29B;
+    letter-spacing: 1px;
+}
+
+.footer-social span{
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.footer-social a {
+    color: #C9B29B;
+    font-size: 15px;
+    transition: color 0.3s;
+}
+
+.footer-social a:hover {
+    color: #C69C6D;
+}
+
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links a {
+    font-size: 13px;
+    color: #C9B29B;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #C69C6D;
+}
+
+.footer-contact {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 13px;
+    color: #C9B29B;
+    line-height: 1.6;
+}
+
+.contact-icon {
+    color: #C69C6D;
+    font-size: 14px;
+    margin-top: 2px;
+    flex-shrink: 0; /*impede que o ícone encolha*/
+    width: 16px;
+    text-align: center;
+}
+
+.footer-contact li {
+    display: flex;
+    gap: 10px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(198,156,109,0.15);
+    padding: 20px 0;
+    margin: 0 -100px;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #C9B29B;
+}

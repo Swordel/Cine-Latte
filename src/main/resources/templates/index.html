@@ -1,0 +1,489 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Corinthia:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ========== HEADER ========== -->
+<header>
+
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+
+        <div>   
+            <h1>CINE LATTE</h1>
+                <p>Bom filme. Bom café. Boa companhia.</p>
+        </div> 
+    </div>    
+
+    <button class="login-btn">
+        ENTRAR
+    </button>
+</header>
+
+
+<!-- ========== HERO CARROSSEL ========== -->
+<section class="hero-carousel" id="hero-carousel">  
+    <div class="hero-track" id="heroTrack">
+ 
+        <div class="hero-slide active" th:style="'background-image: url(' + @{/images/cinemaMain.png} + ')'">
+            <div class="hero-overlay"></div>
+            <div class="hero-info">
+                <h2>Viva essa nova experiência cinematográfica</h2>
+                <p>Saiba mais</p>
+            </div>
+        </div>
+    
+        <div class="hero-slide" th:style="'background-image: url(' + @{/images/comboMario.png} + ')'">
+            <div class="hero-overlay"></div>
+        </div>
+
+        <div class="hero-slide" th:style="'background-image: url(' + @{/images/bannerPrada.webp} + ')'">
+            <div class="hero-overlay"></div>
+            <div class="hero-info">
+                <img th:src="@{/images/logoPrada.webp}" alt="O Diabo Veste Prada 2" class="movie-logo">
+            </div>
+        </div>
+
+    </div>
+
+        <button class="hero-btn hero-btn-prev" id="heroPrev">&#8249;</button>
+        <button class="hero-btn hero-btn-next" id="heroNext">&#8250;</button>
+ 
+        <div class="hero-dots" id="heroDots"></div>
+    
+</section>
+
+<!-- ========== EM CARTAZ ========== -->
+<section class="movies-section">
+    <h2 class="section-title">Em Cartaz</h2>
+ 
+    <div class="movies-row-wrapper" id="cartazWrapper">
+        <button class="side-btn side-btn-prev" id="cartazPrev">&#8249;</button>
+ 
+        <div class="movies-track" id="cartazTrack">
+ 
+             <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazPrada.png}" alt="O Diabo Veste Prada 2">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">O Diabo Veste Prada 2</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazMichael.webp}" alt="Michael">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Michael</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazKombat.webp}" alt="Mortal Kombat 2">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Mortal Kombat 2</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge cls-maior">18</span>
+                        <span>1h56</span>
+                        <span>Ação</span>
+                    </div>
+                </div>
+            </a>
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazMario.jpeg}" alt="Super Mario Galaxy - O Filme">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Super Mario Galaxy - O Filme</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge cls-livre">L</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazCircus.jpg}" alt="The Amazing Digital Circus: O Último Ato">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">The Amazing Digital Circus: O Último Ato</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazMandalorian.jpg}" alt="O Mandaloriano E Grogu">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">O Mandaloriano E Grogu</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h01</span>
+                        <span>Aventura, Fantasia, Ficção</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazOvelha.webp}" alt="As Ovelhas Detetives">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">As Ovelhas Detetives</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazZona.jpg}" alt="Na Zona Cinzenta">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Na Zona Cinzenta</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazTOPGUN.webp}" alt="Top Gun: Ases Indomáveis - 40º Aniversário">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Top Gun: Ases Indomáveis - 40º Aniversário</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Comédia, Drama</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/cartazInterstellar.jpg}" alt="Interstellar">
+                    <span class="movie-rating">9.2</span>
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Interstellar</div>
+                    <div class="movie-meta">
+                        <span class="cls-badge">12</span>
+                        <span>2h</span>
+                        <span>Teste</span>
+                    </div>
+                </div>
+            </a>
+            
+        </div>
+
+        <button class="side-btn side-btn-next" id="cartazNext">&#8250;</button>
+    </div>
+</section>
+
+<!-- ========== EM BREVE ========== -->
+<section class="movies-section">
+    <h2 class="section-title">Em Breve</h2>
+    <div class="movies-row-wrapper" id="breveWrapper">
+        <button class="side-btn side-btn-prev" id="brevePrev">&#8249;</button>
+        <div class="movies-track" id="breveTrack">
+
+           <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveGoodOmens.jpg}" alt="Good Omens 3 EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Good Omens 3</div>
+                    <div class="movie-meta">
+                        <span>Estreia 30/06</span>
+                    </div>
+                </div>
+            </a> 
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveLuigi.jpg}" alt="Luigi's Mansion EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Luigi's Mansion - O Filme</div>
+                    <div class="movie-meta">
+                        <span>Estreia 21/05</span>
+                    </div>
+                </div>
+            </a> 
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveCaramelo.jpg}" alt="Caramelo EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Caramelo - Um Filme Netflix</div>
+                    <div class="movie-meta">
+                        <span>Estreia 22/10</span>
+                    </div>
+                </div>
+            </a> 
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveAvengers.webp}" alt="Avengers Endgame EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Avengers Endgame - Reboot 2026</div>
+                    <div class="movie-meta">
+                        <span>Estreia 09/09</span>
+                    </div>
+                </div>
+            </a> 
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveDemonSlayer.jpg}" alt="Demon Slayer EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Demon Slayer - Castelo Infinito</div>
+                    <div class="movie-meta">
+                        <span>Estreia 11/08</span>
+                    </div>
+                </div>
+            </a> 
+
+            <a href="#" class="movie-card">
+                <div class="movie-poster">
+                    <img th:src="@{/images/breveTotoro.jpg}" alt="Totoro - EM BREVE">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name">Totoro</div>
+                    <div class="movie-meta">
+                        <span>Estreia 21/07</span>
+                    </div>
+                </div>
+            </a> 
+           
+        </div>
+        <button class="side-btn side-btn-next" id="breveNext">&#8250;</button>
+    </div>
+</section>     
+
+<!-- ========== CAFÉ ========== -->
+<section class="cl-cafe">
+
+  <!-- HERO -->
+  <div class="cafe-hero-wrap">
+    <div class="cafe-hero">
+      <div class="cafe-hero-text">
+        <p class="cafe-eyebrow">Nosso café</p>
+        <h2 class="cafe-hero-title">
+          Cada xícara,<br>
+          uma <em>pausa perfeita.</em>
+        </h2>
+        <p class="cafe-hero-sub">
+          Cafés especiais, doces artesanais e um ambiente<br>
+          feito para você curtir antes, durante e depois do filme.
+        </p>
+        <a class="cafe-btn" href="#">Ver cardápio</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO INFERIOR -->
+  <div class="cafe-bottom">
+
+
+    <!-- 3 pilares -->
+    <div class="cafe-pillars">
+      <div class="cafe-pillar">
+        <img class="pillar-icon" th:src="@{/images/cafe-icon.png}" alt="Ícone de café">
+        <div class="pillar-title">Cafés artesanais</div>
+        <p class="pillar-desc">Grãos selecionados e métodos variados, do espresso ao coado.</p>
+      </div>
+      <div class="cafe-pillar">
+        <img class="pillar-icon" th:src="@{/images/sofa-icon.png}" alt="Ícone de sofá">
+        <div class="pillar-title">Ambiente acolhedor</div>
+        <p class="pillar-desc">Um espaço pensado para relaxar e aproveitar cada momento.</p>
+      </div>
+      <div class="cafe-pillar">
+        <img class="pillar-icon" th:src="@{/images/leaf-icon.png}" alt="Ícone de folha">
+        <div class="pillar-title">Grãos frescos</div>
+        <p class="pillar-desc">Origem responsável, torrado na medida certa para cada preparo.</p>
+      </div>
+    </div>
+
+    <!-- Título dos cards -->
+    <div class="cafe-picks-header">
+        <p class="cafe-picks-eyebrow">Nosso Cardápio</p>
+        <h3 class="cafe-picks-title">Favoritos do Latte</h3>
+        <div class="cafe-picks-divider">
+            <span></span>
+            <i class="diamond">◆</i>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- 4 cards de bebida -->
+    <div class="cafe-drinks-grid">
+
+      <div class="drink-card">
+        <img class="drink-img" th:src="@{/images/cafeCaramel.jpeg}" alt="Caramel Macchiato">
+        <div class="drink-info">
+          <div class="drink-name">Caramel Macchiato</div>
+          <div class="drink-price">Uma pequena dose de alegria.</div>
+        </div>
+      </div>
+
+      <div class="drink-card">
+        <img class="drink-img" th:src="@{/images/cafeRilakkuma.jpeg}" alt="Pão do Rilakkuma">
+        <div class="drink-info">
+          <div class="drink-name">Queijo Quente Rilakkuma</div>
+          <div class="drink-price">O famoso "pão de bunda"!</div>
+        </div>
+      </div>
+
+      <div class="drink-card">
+        <img class="drink-img" th:src="@{/images/cafeUrso.jpeg}" alt="Café gelado com urso no topo">
+        <div class="drink-info">
+          <div class="drink-name">Frappuccino Doce de Leite</div>
+          <div class="drink-price">Um ursinho refrescante.</div>
+        </div>
+      </div>
+
+      <div class="drink-card">
+        <img class="drink-img" th:src="@{/images/cafeChococcino.jpeg}" alt="Chococcino">
+        <div class="drink-info">
+          <div class="drink-name">Chococcino</div>
+          <div class="drink-price">Chocolate cremoso com leves notas de café.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="footer-grid">
+
+        <!-- Coluna 1 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Fique por dentro</h4>
+            <p class="footer-col-desc">Receba ofertas especiais, dicas de filmes e novidades do Cine Latte.</p>
+            <div class="footer-email">
+                <input type="email" placeholder="Seu e-mail">
+                <button>→</button>
+            </div>
+            <div class="footer-social">
+                <span>Siga-nos</span>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Links rápidos</h4>
+            <ul class="footer-links">
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Em Cartaz</a></li>
+                <li><a href="#">Em Breve</a></li>
+                <li><a href="#">Cardápio</a></li>
+                <li><a href="#">Sobre nós</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Atendimento</h4>
+            <ul class="footer-links">
+                <li><a href="#">Perguntas frequentes</a></li>
+                <li><a href="#">Política de ingressos</a></li>
+                <li><a href="#">Trocas e cancelamentos</a></li>
+                <li><a href="#">Termos e condições</a></li>
+                <li><a href="#">Privacidade</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 4 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Contato</h4>
+            <ul class="footer-contact">
+                <li>
+                    <i class="fa-solid fa-phone contact-icon"></i>
+                    (13) 99999-9999
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope contact-icon"></i>
+                    contato@cinelatte.com.br
+                </li>
+                <li>
+                    <i class="fa-solid fa-location-dot contact-icon"></i>
+                    Rua do Cinema, 123 <br> Santos, SP
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>LUZES BAIXAS, CAFÉ ALTO NÍVEL.</p>
+        <br>
+        <p>© 2026 Cine Latte · Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+
+
+<script th:src="@{js/index.js}"></script>
+
+
+</body>
+</html>
