@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS filme (
     classificacao VARCHAR(5),
     nota          NUMERIC(3,1),
     imagem        VARCHAR(100),
-    status        VARCHAR(10)
+    status_filme  VARCHAR(10)
 );
 
 -- Tabela associativa filme x gênero
@@ -18,8 +18,44 @@ CREATE TABLE IF NOT EXISTS filme_genero (
     PRIMARY KEY (id_filme, genero)
 );
 
+-- Tabela de salas
+CREATE TABLE IF NOT EXISTS sala (
+    id   SERIAL PRIMARY KEY,
+    nome VARCHAR(50)
+);
+
+-- Tabela de assentos físicos da sala
+CREATE TABLE IF NOT EXISTS assento (
+    id       SERIAL PRIMARY KEY,
+    sala_id  INTEGER REFERENCES sala(id),
+    fileira  VARCHAR(2),
+    numero   INTEGER,
+    tipo     VARCHAR(20)
+);
+
+-- Tabela de sessões (filme + sala + data + horário + idioma)
+CREATE TABLE IF NOT EXISTS sessao (
+    id        SERIAL PRIMARY KEY,
+    filme_id  INTEGER REFERENCES filme(id),
+    sala_id   INTEGER REFERENCES sala(id),
+    dt_sessao VARCHAR(10),
+    horario   VARCHAR(5),
+    idioma    VARCHAR(10)
+);
+
+-- Tabela de reservas (liga assento + sessão + status do assento)
+-- O mesmo assento pode estar livre em uma sessão e ocupado em outra
+CREATE TABLE IF NOT EXISTS reserva (
+    id             SERIAL PRIMARY KEY,
+    assento_id     INTEGER REFERENCES assento(id),
+    sessao_id      INTEGER REFERENCES sessao(id),
+    status_assento VARCHAR(12)
+);
+ 
+-- == DADOS INICIAIS ==
+
 -- Insere filmes apenas se a tabela estiver vazia
-INSERT INTO filme (titulo, sinopse, duracao, classificacao, nota, imagem, status)
+INSERT INTO filme (titulo, sinopse, duracao, classificacao, nota, imagem, status_filme)
 SELECT * FROM (VALUES
     ('O Diabo Veste Prada 2',
      'SINOPSE 1',
@@ -85,7 +121,7 @@ SELECT * FROM (VALUES
      'SINOPSE 16',
      86, 'L', 9.8, 'breveTotoro.jpg', 'EM_BREVE')
 
-) AS novos(titulo, sinopse, duracao, classificacao, nota, imagem, status)
+) AS novos(titulo, sinopse, duracao, classificacao, nota, imagem, status_filme)
 WHERE NOT EXISTS (SELECT 1 FROM filme LIMIT 1);
 
 -- Insere gêneros dos filmes apenas se filme_genero estiver vazia
@@ -109,3 +145,31 @@ SELECT * FROM (VALUES
     (16, 'FANTASIA'), (16, 'AVENTURA')
 ) AS fg(id_filme, genero)
 WHERE NOT EXISTS (SELECT 1 FROM filme_genero LIMIT 1);
+
+-- Salas 
+-- No meu cinema só tem 2 salas 
+INSERT INTO sala (nome)
+SELECT * FROM (VALUES 
+    ('Sala 1'), ('Sala 2')
+) AS s(nome)
+WHERE NOT EXISTS (SELECT 1 FROM sala LIMIT 1);
+
+-- Assentos são gerados pelo SalaService.java no startup da aplicação
+
+-- Sessões (inseridas apenas se a tabela estiver vazia)
+INSERT INTO sessao (filme_id, sala_id, dt_sessao, horario,idioma)
+SELECT * FROM (VALUES
+    (1, 1, '20/06/2026', '15:40', 'DUBLADO'),
+    (1, 2, '20/06/2026', '18:00', 'LEGENDADO'),
+    (1, 2, '20/06/2026', '20:30', 'LEGENDADO'),
+    (4, 1, '20/06/2026', '20:00', 'LEGENDADO'),
+    (4, 1, '21/06/2026', '12:50', 'DUBLADO'),
+    (4, 1, '21/06/2026', '16:50', 'LEGENDADO'),
+    (4, 2, '21/06/2026', '15:00', 'LEGENDADO'),
+    (3, 1, '21/06/2026', '20:00', 'LEGENDADO'),
+    (5, 2, '24/06/2026', '15:00', 'DUBLADO'),
+    (6, 1, '25/06/2026', '15:00', 'DUBLADO'),
+    (7, 2, '26/06/2026', '15:00', 'LEGENDADO'),
+    (8, 1, '27/06/2026', '15:00', 'DUBLADO')
+) AS s(filme_id, sala_id, dt_sessao, horario)
+WHERE NOT EXISTS (SELECT 1 FROM sessao LIMIT 1);

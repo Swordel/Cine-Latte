@@ -8,25 +8,28 @@ public class Sessao {
     private int salaId;
     private String data;     // formato "DD/MM/YYYY"
     private String horario;  // formato "HH:MM"
+    private SessaoIdioma idioma; //legendado ou dublado :D
 
     // Construtor vazio
     public Sessao() {}
 
     // Construtor para INSERT (sem id)
-    public Sessao(int filmeId, int salaId, String data, String horario) {
+    public Sessao(int filmeId, int salaId, String data, String horario, SessaoIdioma idioma) {
         this.filmeId = filmeId;
         this.salaId = salaId;
         this.data = data;
         this.horario = horario;
+        this.idioma = idioma;
     }
 
     // Construtor para SELECT (com id)
-    public Sessao(int id, int filmeId, int salaId, String data, String horario) {
+    public Sessao(int id, int filmeId, int salaId, String data, String horario, SessaoIdioma idioma) {
         this.id = id;
         this.filmeId = filmeId;
         this.salaId = salaId;
         this.data = data;
         this.horario = horario;
+        this.idioma = idioma;
     }
 
     public int getId() {
@@ -49,6 +52,10 @@ public class Sessao {
         return horario;
     }
 
+    public SessaoIdioma getIdioma() {
+        return idioma;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -68,6 +75,12 @@ public class Sessao {
     public void setHorario(String horario) {
         this.horario = horario;
     }
+
+    public void setIdioma(SessaoIdioma idioma) {
+        this.idioma = idioma;
+    }
+
+
 
     
 }
