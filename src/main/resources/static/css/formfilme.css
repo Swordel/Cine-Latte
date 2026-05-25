@@ -50,7 +50,7 @@ body{
  
 label {
     font-size: 11px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     color: #C9B29B;
     text-transform: uppercase;
 }
@@ -134,5 +134,5 @@ textarea {
 }
  
 .submit-btn:hover {
-    background: #C69C6D;
+    background: #E8DCC6;
 }
