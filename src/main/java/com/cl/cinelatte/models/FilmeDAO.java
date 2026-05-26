@@ -1,5 +1,9 @@
 package com.cl.cinelatte.models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +53,36 @@ public class FilmeDAO {
         obj[1] = genero.name();
         jdbc.update(sql, obj);
     }
+
+      // SELECT um filme por id
+    public Filme obterFilme(int id) {
+        String sql = "SELECT * FROM filme WHERE id = ?";
+        Map<String, Object> registro = jdbc.queryForMap(sql, id);
+        return Filme.converterRegistros(registro);
+    }
+
+     // SELECT todos os filmes de um status (EM_CARTAZ ou EM_BREVE)
+    public List<Filme> obterFilmesPorStatus(FilmeStatus status) {
+        String sql = "SELECT * FROM filme WHERE status_filme = ? ORDER BY id";
+        List<Map<String, Object>> listaRegistros = jdbc.queryForList(sql, status.name());
+        ArrayList<Filme> aux = new ArrayList<>();
+        for (Map<String, Object> registro : listaRegistros) {
+            aux.add(Filme.converterRegistros(registro));
+        }
+        return aux;
+    }
+
+    // SELECT gêneros de um filme
+    public List<FilmeGenero> obterGenerosPorFilme(int idFilme) {
+        String sql = "SELECT genero FROM filme_genero WHERE id_filme = ?";
+        List<Map<String, Object>> listaRegistros = jdbc.queryForList(sql, idFilme);
+        ArrayList<FilmeGenero> aux = new ArrayList<>();
+        for (Map<String, Object> registro : listaRegistros) {
+            aux.add(FilmeGenero.valueOf((String) registro.get("genero")));
+        }
+        return aux;
+    }
+
+
+
 }

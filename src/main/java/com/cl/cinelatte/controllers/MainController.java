@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.cl.cinelatte.models.Filme;
 import com.cl.cinelatte.models.FilmeGenero;
 import com.cl.cinelatte.models.FilmeService;
+import com.cl.cinelatte.models.FilmeStatus;
 
 @Controller
 public class MainController {
@@ -21,8 +22,12 @@ public class MainController {
    @Autowired
    ApplicationContext context;
 
-   @GetMapping("/")
-    public String index(){
+   // Página inicial -> busca filmes do banco por status
+    @GetMapping("/")
+    public String index(Model model) {
+        FilmeService fs = context.getBean(FilmeService.class); // é só pra chamar com o construtor via autowired
+        model.addAttribute("filmesEmCartaz", fs.obterFilmesPorStatus(FilmeStatus.EM_CARTAZ));  //link do view com o model
+        //model.addAttribute("filmesEmBreve",  fs.obterFilmesPorStatus(FilmeStatus.EM_BREVE));  //oq tá no aspas é o nome no HTML
         return "index";
     }
 

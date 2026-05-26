@@ -1,6 +1,7 @@
 package com.cl.cinelatte.models;
 
 import java.util.List;
+import java.util.Map;
 
 // POJO - Plain Old Java Object
 public class Filme {
@@ -114,6 +115,30 @@ public class Filme {
 
     public void setGeneros(List<FilmeGenero> generos) {
         this.generos = generos;
+    }
+
+     // Converte um registro do banco (Map) para um objeto Filme
+    public static Filme converterRegistros(Map<String, Object> registro) {
+        int id               = (int) registro.get("id");
+        String titulo        = (String) registro.get("titulo");
+        String sinopse       = (String) registro.get("sinopse");
+        int duracao          = (int) registro.get("duracao");
+        String classificacao = (String) registro.get("classificacao");
+        double nota          = ((Number) registro.get("nota")).doubleValue();
+        String imagem        = (String) registro.get("imagem");
+        FilmeStatus status   = FilmeStatus.valueOf((String) registro.get("status_filme"));
+        return new Filme(id, titulo, sinopse, duracao, classificacao, nota, imagem, status);
+    }
+
+    // Retorna a duração formatada: 130 -> "2h 10min"
+    public String getDuracaoFormatada() {
+        int horas = duracao / 60;
+        int minutos = duracao % 60;
+        
+        if (minutos == 0)
+            return horas + "h";
+
+        return horas + "h " + minutos + "min";
     }
 
 }

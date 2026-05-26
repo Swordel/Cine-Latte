@@ -76,156 +76,30 @@
  
         <div class="movies-track" id="cartazTrack">
  
-             <a href="#" class="movie-card">
+            <a th:each="filme : ${filmesEmCartaz}" th:href="@{/filme/{id}/sessoes(id=${filme.id})}" class="movie-card">
                 <div class="movie-poster">
-                    <img th:src="@{/images/cartazPrada.png}" alt="O Diabo Veste Prada 2">
-                    <span class="movie-rating">9.2</span>
+                    <img th:src="@{/images/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
+                    <span class="movie-rating" th:text="${filme.nota}"></span>
                 </div>
-                <div class="movie-info">
-                    <div class="movie-name">O Diabo Veste Prada 2</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazMichael.webp}" alt="Michael">
-                    <span class="movie-rating">9.2</span>
-                </div>
                 <div class="movie-info">
-                    <div class="movie-name">Michael</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazKombat.webp}" alt="Mortal Kombat 2">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Mortal Kombat 2</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge cls-maior">18</span>
-                        <span>1h56</span>
-                        <span>Ação</span>
-                    </div>
-                </div>
-            </a>
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazMario.jpeg}" alt="Super Mario Galaxy - O Filme">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Super Mario Galaxy - O Filme</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge cls-livre">L</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
+                    <div class="movie-name" th:text="${filme.titulo}"></div>
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazCircus.jpg}" alt="The Amazing Digital Circus: O Último Ato">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">The Amazing Digital Circus: O Último Ato</div>
                     <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
+                        <span th:text="${filme.classificacao}"
+                              th:class="${filme.classificacao == 'L'} ? 'cls-badge cls-livre' :
+                                        (${filme.classificacao == '18'} ? 'cls-badge cls-maior' : 'cls-badge')">
+                        </span>
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazMandalorian.jpg}" alt="O Mandaloriano E Grogu">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">O Mandaloriano E Grogu</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h01</span>
-                        <span>Aventura, Fantasia, Ficção</span>
-                    </div>
-                </div>
-            </a>
+                         <span th:text="${filme.duracaoFormatada}"></span>
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazOvelha.webp}" alt="As Ovelhas Detetives">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">As Ovelhas Detetives</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
+                        <!-- <span>Comédia, Drama</span> -->
                     </div>
-                </div>
-            </a>
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazZona.jpg}" alt="Na Zona Cinzenta">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Na Zona Cinzenta</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazTOPGUN.webp}" alt="Top Gun: Ases Indomáveis - 40º Aniversário">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Top Gun: Ases Indomáveis - 40º Aniversário</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Comédia, Drama</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/cartazInterstellar.jpg}" alt="Interstellar">
-                    <span class="movie-rating">9.2</span>
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Interstellar</div>
-                    <div class="movie-meta">
-                        <span class="cls-badge">12</span>
-                        <span>2h</span>
-                        <span>Teste</span>
-                    </div>
                 </div>
             </a>
             
         </div>
-
         <button class="side-btn side-btn-next" id="cartazNext">&#8250;</button>
     </div>
 </section>

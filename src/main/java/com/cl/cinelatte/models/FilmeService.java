@@ -19,4 +19,17 @@ public class FilmeService {
         }
     }
 
+    // SELECT um filme por id (com gêneros carregados)
+    public Filme obterFilme(int id) {
+        Filme filme = filmeDAO.obterFilme(id);
+        filme.setGeneros(filmeDAO.obterGenerosPorFilme(id));
+        return filme;
+    }
+
+    
+    // SELECT filmes por status
+    public List<Filme> obterFilmesPorStatus(FilmeStatus status) {
+        return filmeDAO.obterFilmesPorStatus(status);
+    }
+
 }
