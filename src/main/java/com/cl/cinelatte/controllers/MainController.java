@@ -27,7 +27,7 @@ public class MainController {
     public String index(Model model) {
         FilmeService fs = context.getBean(FilmeService.class); // é só pra chamar com o construtor via autowired
         model.addAttribute("filmesEmCartaz", fs.obterFilmesPorStatus(FilmeStatus.EM_CARTAZ));  //link do view com o model
-        //model.addAttribute("filmesEmBreve",  fs.obterFilmesPorStatus(FilmeStatus.EM_BREVE));  //oq tá no aspas é o nome no HTML
+        model.addAttribute("filmesEmBreve",  fs.obterFilmesPorStatus(FilmeStatus.EM_BREVE));  //oq tá no aspas é o nome no HTML
         return "index";
     }
 
@@ -43,6 +43,11 @@ public class MainController {
         FilmeService fs = context.getBean(FilmeService.class);
         fs.inserirFilme(filme, generos);
         return "sucesso";
-    } 
+    }
+
+    @GetMapping("/filme/{id}/sessoes")
+    public String sessoes(){
+        return "sessoes";
+    }
     
 }

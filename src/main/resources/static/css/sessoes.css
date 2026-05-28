@@ -1,0 +1,297 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    padding-top: 90px;
+}
+
+/* ── HERO DO FILME ──────────────────────────────────────────── */
+.filme-hero {
+    position: relative;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Banner ao fundo */
+.filme-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center 20%;
+    z-index: 0;
+}
+
+/* Overlay duplo: escurece geral + bloqueia mais à esquerda */
+.filme-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to right,
+            rgba(30,22,18,1)    0%,
+            rgba(30,22,18,0.92) 30%,
+            rgba(30,22,18,0.55) 60%,
+            rgba(30,22,18,0.25) 100%),
+        linear-gradient(to top,
+            rgba(30,22,18,0.8) 0%,
+            transparent 50%);
+    z-index: 1;
+}
+
+/* Conteúdo: duas colunas */
+.filme-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 40px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+/* ── INFORMAÇÕES DO FILME (coluna esquerda) ──────────────────── */
+.filme-info {
+    flex: 1;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.filme-titulo {
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #F5EBDD;
+    line-height: 1.25;
+}
+
+.filme-tags {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag-cls {
+    background: #e8a020;
+    color: white;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    line-height: 1.4;
+}
+
+.tag-livre {
+    background: #4caf50;
+}
+
+.tag-maior {
+    background: black;
+    border: 1px solid white;
+}
+
+.tag-sep {
+    color: rgba(198,156,109,0.4);
+    font-size: 12px;
+}
+
+.tag-info {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    color: #C9B29B;
+}
+
+.filme-sinopse {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #C9B29B;
+    max-width: 500px;
+}
+
+/* ── PÔSTER (coluna direita) ─────────────────────────────────── */
+.filme-poster-wrapper {
+    flex: 0 0 auto;
+    align-self: flex-start;
+}
+
+.filme-poster {
+    width: 270px;
+    border-radius: 6px;
+    display: block;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.65);
+    border: 1px solid rgba(198,156,109,0.15);
+}
+
+/* ── SEÇÃO DE SESSÕES ───────────────────────────────────────── */
+.sessoes-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 64px;
+}
+
+/* Abas Sessões / Sobre o filme */
+.sessoes-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1.5px solid rgba(198,156,109,0.12);
+    margin-bottom: 24px;
+}
+
+.tab {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 16px 20px;
+    color: #C9B29B;
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -1.5px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.tab.active {
+    color: #F5EBDD;
+    border-bottom-color: #7A8B74;
+    font-weight: 500;
+}
+
+.tab:hover:not(.active) {
+    color: #F5EBDD;
+}
+
+/* ── SELETOR DE DATAS ───────────────────────────────────────── */
+.datas-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.data-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(198,156,109,0.2);
+    background: rgba(75,54,33,0.15);
+    cursor: pointer;
+    min-width: 66px;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.data-btn:hover:not(.active) {
+    border-color: rgba(198,156,109,0.4);
+    background: rgba(75,54,33,0.25);
+}
+
+.data-btn.active {
+    background: #7A8B74;
+    border-color: #7A8B74;
+}
+
+.db-dia {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #C9B29B;
+}
+
+.db-data {
+    font-size: 14px;
+    font-weight: 500;
+    color: #F5EBDD;
+}
+
+.data-btn.active .db-dia,
+.data-btn.active .db-data {
+    color: #1E1612;
+}
+
+/* ── CARD DE HORÁRIOS ───────────────────────────────────────── */
+.horarios-card {
+    background: rgba(75,54,33,0.12);
+    border: 1px solid rgba(198,156,109,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.idioma-grupo {
+    padding: 22px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.idioma-grupo + .idioma-grupo {
+    border-top: 1px solid rgba(198,156,109,0.08);
+}
+
+.idioma-label {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+.idioma-label.leg {
+    background: rgba(122,139,116,0.18);
+    color: #7A8B74;
+    border: 1px solid rgba(122,139,116,0.3);
+}
+
+.idioma-label.dub {
+    background: rgba(198,156,109,0.12);
+    color: #C69C6D;
+    border: 1px solid rgba(198,156,109,0.28);
+}
+
+.horarios-lista {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.horario-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 26px;
+    border-radius: 8px;
+    border: 1px solid rgba(198,156,109,0.22);
+    background: rgba(30,22,18,0.5);
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #F5EBDD;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+    letter-spacing: 0.5px;
+}
+
+.horario-btn:hover {
+    border-color: #C69C6D;
+    background: rgba(198,156,109,0.1);
+    color: #F5EBDD;
+}

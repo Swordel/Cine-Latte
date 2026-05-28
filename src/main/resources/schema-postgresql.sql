@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS sessao (
     id        SERIAL PRIMARY KEY,
     filme_id  INTEGER REFERENCES filme(id),
     sala_id   INTEGER REFERENCES sala(id),
-    dt_sessao VARCHAR(10),
-    horario   VARCHAR(5),
+    dt_sessao DATE,
+    horario   TIME,
     idioma    VARCHAR(10)
 );
 
@@ -157,19 +157,16 @@ WHERE NOT EXISTS (SELECT 1 FROM sala LIMIT 1);
 -- Assentos são gerados pelo SalaService.java no startup da aplicação
 
 -- Sessões (inseridas apenas se a tabela estiver vazia)
-INSERT INTO sessao (filme_id, sala_id, dt_sessao, horario,idioma)
+INSERT INTO sessao (filme_id, sala_id, dt_sessao, horario, idioma)
 SELECT * FROM (VALUES
-    (1, 1, '20/06/2026', '15:40', 'DUBLADO'),
-    (1, 2, '20/06/2026', '18:00', 'LEGENDADO'),
-    (1, 2, '20/06/2026', '20:30', 'LEGENDADO'),
-    (4, 1, '20/06/2026', '20:00', 'LEGENDADO'),
-    (4, 1, '21/06/2026', '12:50', 'DUBLADO'),
-    (4, 1, '21/06/2026', '16:50', 'LEGENDADO'),
-    (4, 2, '21/06/2026', '15:00', 'LEGENDADO'),
-    (3, 1, '21/06/2026', '20:00', 'LEGENDADO'),
-    (5, 2, '24/06/2026', '15:00', 'DUBLADO'),
-    (6, 1, '25/06/2026', '15:00', 'DUBLADO'),
-    (7, 2, '26/06/2026', '15:00', 'LEGENDADO'),
-    (8, 1, '27/06/2026', '15:00', 'DUBLADO')
-) AS s(filme_id, sala_id, dt_sessao, horario)
+    (1, 1, DATE '2026-05-27', TIME '14:00', 'LEGENDADO'),
+    (1, 1, DATE '2026-05-27', TIME '17:30', 'DUBLADO'),
+    (1, 2, DATE '2026-05-27', TIME '20:00', 'LEGENDADO'),
+    (1, 1, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
+    (1, 1, DATE '2026-05-28', TIME '19:00', 'LEGENDADO'),
+    (2, 1, DATE '2026-05-27', TIME '16:00', 'DUBLADO'),
+    (3, 2, DATE '2026-05-27', TIME '19:00', 'LEGENDADO'),
+    (6, 1, DATE '2026-05-28', TIME '18:00', 'LEGENDADO'),
+    (6, 2, DATE '2026-05-28', TIME '21:00', 'DUBLADO')
+) AS s(filme_id, sala_id, dt_sessao, horario, idioma)
 WHERE NOT EXISTS (SELECT 1 FROM sessao LIMIT 1);

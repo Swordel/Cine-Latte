@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Diabo Veste Prada 2 — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/sessoes.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <button class="login-btn" onclick="history.back()">VOLTAR</button>
+</header>
+
+<!-- ========== HERO DO FILME ========== -->
+<section class="filme-hero">
+
+    <div class="filme-hero-bg" th:style="'background-image: url(' + @{/images/bannerPrada.webp} + ')'"></div>
+    <div class="filme-hero-overlay"></div>
+
+    <!-- Conteúdo do hero -->
+    <div class="filme-hero-content">
+
+        <!-- Coluna esquerda: informações -->
+        <div class="filme-info">
+            <h2 class="filme-titulo">O Diabo Veste Prada 2</h2>
+
+            <div class="filme-tags">
+                <span class="tag-cls">12</span>
+                <span class="tag-sep">|</span>
+                <span class="tag-info">2h</span>
+                <span class="tag-sep">|</span>
+                <span class="tag-info">Comédia, Drama</span>
+            </div>
+
+            <p class="filme-sinopse">
+                Lidando com o colapso do jornalismo, Miranda Priestly precisa enfrentar ainda mais um obstáculo: sua antiga secretária Emily, que agora é uma executiva de sucesso. Quando seus caminhos se cruzam novamente no mundo da moda, velhas tensões e segredos vêm à tona.
+            </p>
+        </div>
+
+        <!-- Coluna direita: pôster -->
+        <div class="filme-poster-wrapper">
+            <img class="filme-poster" th:src="@{/images/cartazPrada.png}" alt="O Diabo Veste Prada 2">
+        </div>
+
+    </div>
+</section>
+
+<!-- ========== SESSÕES ========== -->
+<section class="sessoes-section">
+
+    <!-- Abas -->
+    <div class="sessoes-tabs">
+        <div class="tab active">Sessões</div>
+        <div class="tab">Sobre o filme</div>
+    </div>
+
+    <!-- Seletor de datas -->
+    <div class="datas-row">
+
+        <!-- Data ativa (hoje) -->
+        <a class="data-btn active" href="#">
+            <span class="db-dia">HOJE</span>
+            <span class="db-data">27/05</span>
+        </a>
+
+        <!-- Outras datas -->
+        <a class="data-btn" href="#">
+            <span class="db-dia">QUI</span>
+            <span class="db-data">28/05</span>
+        </a>
+        <a class="data-btn" href="#">
+            <span class="db-dia">SEX</span>
+            <span class="db-data">29/05</span>
+        </a>
+        <a class="data-btn" href="#">
+            <span class="db-dia">SÁB</span>
+            <span class="db-data">30/05</span>
+        </a>
+        <a class="data-btn" href="#">
+            <span class="db-dia">DOM</span>
+            <span class="db-data">31/05</span>
+        </a>
+        <a class="data-btn" href="#">
+            <span class="db-dia">SEG</span>
+            <span class="db-data">01/06</span>
+        </a>
+        <a class="data-btn" href="#">
+            <span class="db-dia">TER</span>
+            <span class="db-data">02/06</span>
+        </a>
+    </div>
+
+    <!-- Horários -->
+    <div class="horarios-card">
+
+        <!-- Grupo Legendado -->
+        <div class="idioma-grupo">
+            <span class="idioma-label leg">LEGENDADO</span>
+            <div class="horarios-lista">
+                <a href="#" class="horario-btn">14:00</a>
+                <a href="#" class="horario-btn">17:15</a>
+                <a href="#" class="horario-btn">21:45</a>
+            </div>
+        </div>
+
+        <!-- Grupo Dublado -->
+        <div class="idioma-grupo">
+            <span class="idioma-label dub">DUBLADO</span>
+            <div class="horarios-lista">
+                <a href="#" class="horario-btn">15:30</a>
+                <a href="#" class="horario-btn">18:45</a>
+                <a href="#" class="horario-btn">20:00</a>
+                <a href="#" class="horario-btn">22:30</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="footer-grid">
+
+        <!-- Coluna 1 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Fique por dentro</h4>
+            <p class="footer-col-desc">Receba ofertas especiais, dicas de filmes e novidades do Cine Latte.</p>
+            <div class="footer-email">
+                <input type="email" placeholder="Seu e-mail">
+                <button>→</button>
+            </div>
+            <div class="footer-social">
+                <span>Siga-nos</span>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Links rápidos</h4>
+            <ul class="footer-links">
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Em Cartaz</a></li>
+                <li><a href="#">Em Breve</a></li>
+                <li><a href="#">Cardápio</a></li>
+                <li><a href="#">Sobre nós</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Atendimento</h4>
+            <ul class="footer-links">
+                <li><a href="#">Perguntas frequentes</a></li>
+                <li><a href="#">Política de ingressos</a></li>
+                <li><a href="#">Trocas e cancelamentos</a></li>
+                <li><a href="#">Termos e condições</a></li>
+                <li><a href="#">Privacidade</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 4 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Contato</h4>
+            <ul class="footer-contact">
+                <li>
+                    <i class="fa-solid fa-phone contact-icon"></i>
+                    (13) 99999-9999
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope contact-icon"></i>
+                    contato@cinelatte.com.br
+                </li>
+                <li>
+                    <i class="fa-solid fa-location-dot contact-icon"></i>
+                    Rua do Cinema, 123 <br> Santos, SP
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>LUZES BAIXAS, CAFÉ ALTO NÍVEL.</p>
+        <br>
+        <p>© 2026 Cine Latte · Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -93,7 +93,6 @@
 
                          <span th:text="${filme.duracaoFormatada}"></span>
 
-                        <!-- <span>Comédia, Drama</span> -->
                     </div>
 
                 </div>
@@ -111,78 +110,21 @@
         <button class="side-btn side-btn-prev" id="brevePrev">&#8249;</button>
         <div class="movies-track" id="breveTrack">
 
-           <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveGoodOmens.jpg}" alt="Good Omens 3 EM BREVE">
+           <a th:each="filme : ${filmesEmBreve}" th:href="@{/filme/{id}/sessoes(id=${filme.id})}" class="movie-card">
+             
+            <div class="movie-poster">
+                   <img th:src="@{/images/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
                 </div>
-                <div class="movie-info">
-                    <div class="movie-name">Good Omens 3</div>
-                    <div class="movie-meta">
-                        <span>Estreia 30/06</span>
-                    </div>
-                </div>
-            </a> 
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveLuigi.jpg}" alt="Luigi's Mansion EM BREVE">
-                </div>
                 <div class="movie-info">
-                    <div class="movie-name">Luigi's Mansion - O Filme</div>
+                    <div class="movie-name" th:text="${filme.titulo}"></div>
                     <div class="movie-meta">
-                        <span>Estreia 21/05</span>
+                        <span class="release-date">Em breve</span>
                     </div>
                 </div>
-            </a> 
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveCaramelo.jpg}" alt="Caramelo EM BREVE">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Caramelo - Um Filme Netflix</div>
-                    <div class="movie-meta">
-                        <span>Estreia 22/10</span>
-                    </div>
-                </div>
-            </a> 
+           </a> 
 
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveAvengers.webp}" alt="Avengers Endgame EM BREVE">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Avengers Endgame - Reboot 2026</div>
-                    <div class="movie-meta">
-                        <span>Estreia 09/09</span>
-                    </div>
-                </div>
-            </a> 
-
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveDemonSlayer.jpg}" alt="Demon Slayer EM BREVE">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Demon Slayer - Castelo Infinito</div>
-                    <div class="movie-meta">
-                        <span>Estreia 11/08</span>
-                    </div>
-                </div>
-            </a> 
-
-            <a href="#" class="movie-card">
-                <div class="movie-poster">
-                    <img th:src="@{/images/breveTotoro.jpg}" alt="Totoro - EM BREVE">
-                </div>
-                <div class="movie-info">
-                    <div class="movie-name">Totoro</div>
-                    <div class="movie-meta">
-                        <span>Estreia 21/07</span>
-                    </div>
-                </div>
-            </a> 
-           
         </div>
         <button class="side-btn side-btn-next" id="breveNext">&#8250;</button>
     </div>
