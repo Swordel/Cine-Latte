@@ -39,24 +39,41 @@
 
         <!-- Coluna esquerda: informações -->
         <div class="filme-info">
-            <h2 class="filme-titulo">O Diabo Veste Prada 2</h2>
+             <h2 class="filme-titulo" th:text="${filme.titulo}"></h2>
 
             <div class="filme-tags">
-                <span class="tag-cls">12</span>
+                
+                 <!-- Classificação indicativa com cor dinâmica -->
+                <span th:text="${filme.classificacao}"
+                      th:class="${filme.classificacao == 'L'} ? 'tag-cls tag-livre' :
+                                (${filme.classificacao == '18'} ? 'tag-cls tag-maior' : 'tag-cls')">
+                </span>
+
                 <span class="tag-sep">|</span>
-                <span class="tag-info">2h</span>
+
+                <!-- Duração formatada: "2h 10min" -->
+                <span class="tag-info" th:text="${filme.duracaoFormatada}"></span>
+
                 <span class="tag-sep">|</span>
-                <span class="tag-info">Comédia, Drama</span>
+                
+                <!-- Gêneros separados por · -->
+                <span th:each="genero, i : ${filme.generos}">
+                    <span th:if="${!i.first}" class="tag-sep">·</span>
+                    <span class="tag-info" th:text="${genero.descricao}"></span>
+                </span>
+
+
             </div>
 
-            <p class="filme-sinopse">
-                Lidando com o colapso do jornalismo, Miranda Priestly precisa enfrentar ainda mais um obstáculo: sua antiga secretária Emily, que agora é uma executiva de sucesso. Quando seus caminhos se cruzam novamente no mundo da moda, velhas tensões e segredos vêm à tona.
-            </p>
+            <p class="filme-sinopse" th:text="${filme.sinopse}"></p>
+
         </div>
 
         <!-- Coluna direita: pôster -->
         <div class="filme-poster-wrapper">
-            <img class="filme-poster" th:src="@{/images/cartazPrada.png}" alt="O Diabo Veste Prada 2">
+            <img class="filme-poster"
+                 th:src="@{/images/{img}(img=${filme.imagem})}"
+                 th:alt="${filme.titulo}">
         </div>
 
     </div>
@@ -74,61 +91,53 @@
     <!-- Seletor de datas -->
     <div class="datas-row">
 
-        <!-- Data ativa (hoje) -->
-        <a class="data-btn active" href="#">
-            <span class="db-dia">HOJE</span>
-            <span class="db-data">27/05</span>
+        
+        <a th:each="data : ${datas}"
+           th:href="@{/filme/{id}/sessoes/filtrar(id=${filme.id}, data=${data})}"
+           th:class="${data == dataSelecionada} ? 'data-btn active' : 'data-btn'">
+           
+           <!-- tentei colocar sessao.diaSemana e sessao.dataFormatada, mas depois notei que meu th:each é com datas e não sessões... -->
+             <span class="db-dia" th:text="${#lists.isEmpty(datas) ? '' :
+                sessao.diaSemana}">
+            </span>
+             <span class="db-data" th:text="${sessao.dataFormatada}"></span>
         </a>
 
-        <!-- Outras datas -->
-        <a class="data-btn" href="#">
-            <span class="db-dia">QUI</span>
-            <span class="db-data">28/05</span>
-        </a>
-        <a class="data-btn" href="#">
-            <span class="db-dia">SEX</span>
-            <span class="db-data">29/05</span>
-        </a>
-        <a class="data-btn" href="#">
-            <span class="db-dia">SÁB</span>
-            <span class="db-data">30/05</span>
-        </a>
-        <a class="data-btn" href="#">
-            <span class="db-dia">DOM</span>
-            <span class="db-data">31/05</span>
-        </a>
-        <a class="data-btn" href="#">
-            <span class="db-dia">SEG</span>
-            <span class="db-data">01/06</span>
-        </a>
-        <a class="data-btn" href="#">
-            <span class="db-dia">TER</span>
-            <span class="db-data">02/06</span>
-        </a>
+        
     </div>
 
     <!-- Horários -->
     <div class="horarios-card">
 
-        <!-- Grupo Legendado -->
-        <div class="idioma-grupo">
+        <!-- Grupo Legendado — só aparece se houver sessões legendadas -->
+        <div class="idioma-grupo" th:if="${temLeg}">
             <span class="idioma-label leg">LEGENDADO</span>
             <div class="horarios-lista">
-                <a href="#" class="horario-btn">14:00</a>
-                <a href="#" class="horario-btn">17:15</a>
-                <a href="#" class="horario-btn">21:45</a>
+                <a th:each="sessao : ${sessoesLeg}"
+                   th:href="@{/sessao/{id}/assentos(id=${sessao.id})}"
+                   class="horario-btn"
+                   th:text="${sessao.horarioFormatado}">
+                </a>
+
             </div>
         </div>
 
         <!-- Grupo Dublado -->
-        <div class="idioma-grupo">
+        <div class="idioma-grupo" th:if="${temDub}">
             <span class="idioma-label dub">DUBLADO</span>
             <div class="horarios-lista">
-                <a href="#" class="horario-btn">15:30</a>
-                <a href="#" class="horario-btn">18:45</a>
-                <a href="#" class="horario-btn">20:00</a>
-                <a href="#" class="horario-btn">22:30</a>
+                <a th:each="sessao : ${sessoesDub}"
+                   th:href="@{/sessao/{id}/assentos(id=${sessao.id})}"
+                   class="horario-btn"
+                   th:text="${sessao.horarioFormatado}">
+                </a>
             </div>
+        </div>
+
+         <!-- Nenhuma sessão disponível -->
+        <div class="sem-sessoes"
+             th:if="${!temLeg and !temDub}">
+            <p>Nenhuma sessão disponível para esta data.</p>
         </div>
 
     </div>
