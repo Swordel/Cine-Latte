@@ -166,7 +166,8 @@ SELECT * FROM (VALUES
     (1, 1, DATE '2026-05-28', TIME '19:00', 'LEGENDADO'),
     (2, 1, DATE '2026-05-27', TIME '16:00', 'DUBLADO'),
     (3, 2, DATE '2026-05-27', TIME '19:00', 'LEGENDADO'),
-    (6, 1, DATE '2026-05-28', TIME '18:00', 'LEGENDADO'),
-    (6, 2, DATE '2026-05-28', TIME '21:00', 'DUBLADO')
+    (6, 1, DATE '2026-05-31', TIME '18:00', 'LEGENDADO'),
+    (6, 2, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
+    (6, 2, DATE '2026-05-30', TIME '21:00', 'DUBLADO')
 ) AS s(filme_id, sala_id, dt_sessao, horario, idioma)
 WHERE NOT EXISTS (SELECT 1 FROM sessao LIMIT 1);

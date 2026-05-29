@@ -1,6 +1,7 @@
 package com.cl.cinelatte.controllers;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cl.cinelatte.models.DataSessao;
 import com.cl.cinelatte.models.Filme;
 import com.cl.cinelatte.models.FilmeGenero;
 import com.cl.cinelatte.models.FilmeService;
@@ -61,10 +63,15 @@ public class MainController {
         SessaoService ss = context.getBean(SessaoService.class);
         
         Filme filme = fs.obterFilme(id); //o service já está populando os gêneros também
-        List<LocalDate> datas = ss.obterDatasDoFilme(id);
+        List<LocalDate> datasBanco = ss.obterDatasDoFilme(id);
+
+        List<DataSessao> datas = new ArrayList<>(); //fiz assim como o aux do DAO 
+        for (LocalDate d : datasBanco) {
+            datas.add(new DataSessao(d));
+        }
 
          // Seleciona a primeira data disponível por padrão
-        LocalDate dataSelecionada = datas.isEmpty() ? null : datas.get(0);
+        LocalDate dataSelecionada = datasBanco.isEmpty() ? null : datasBanco.get(0);
 
         carregarSessoes(model, ss, id, dataSelecionada);
 
@@ -79,7 +86,7 @@ public class MainController {
     // Evita repetição de código entre sessoes() e filtrarSessoes()
     private void carregarSessoes(Model model, SessaoService ss, int filmeId, LocalDate data) {
         if (data == null) {
-            model.addAttribute("sessoesLeg", List.of());
+            model.addAttribute("sessoesLeg", List.of()); //equivalente de new ArrayList<>() 
             model.addAttribute("sessoesDub", List.of());
             model.addAttribute("temLeg", false);
             model.addAttribute("temDub", false);
@@ -120,7 +127,12 @@ public class MainController {
         SessaoService ss = context.getBean(SessaoService.class);
 
         Filme filme = fs.obterFilme(id);
-        List<LocalDate> datas = ss.obterDatasDoFilme(id);
+        List<LocalDate> datasBanco = ss.obterDatasDoFilme(id);
+
+        List<DataSessao> datas = new ArrayList<>(); 
+        for (LocalDate d : datasBanco) {
+            datas.add(new DataSessao(d));
+        }
 
         carregarSessoes(model, ss, id, data);
 

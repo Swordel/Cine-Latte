@@ -103,25 +103,6 @@ public class Sessao {
         return new Sessao(id, filmeId, salaId, dt, horario, idioma);
     }
 
-    // Retorna o dia da semana abreviado: "SEG", "TER", etc.
-    // avaliando se vou usar mesmo, mas já deixei pronto ~
-    public String getDiaSemana() {
-        return switch (dt.getDayOfWeek()) {
-            case MONDAY    -> "SEG";
-            case TUESDAY   -> "TER";
-            case WEDNESDAY -> "QUA";
-            case THURSDAY  -> "QUI";
-            case FRIDAY    -> "SEX";
-            case SATURDAY  -> "SÁB";
-            case SUNDAY    -> "DOM";
-        };
-    }
-
-    // Retorna a data formatada para exibição nas sessões: "26/05" >:D
-    public String getDataFormatada() {
-        return dt.format(DateTimeFormatter.ofPattern("dd/MM"));
-    }
-
     // Retorna o horário formatado, ex.: "15:40"
     public String getHorarioFormatado() {
         return horario.format(DateTimeFormatter.ofPattern("HH:mm"));

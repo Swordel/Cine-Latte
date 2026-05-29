@@ -93,14 +93,12 @@
 
         
         <a th:each="data : ${datas}"
-           th:href="@{/filme/{id}/sessoes/filtrar(id=${filme.id}, data=${data})}"
-           th:class="${data == dataSelecionada} ? 'data-btn active' : 'data-btn'">
-           
-           <!-- tentei colocar sessao.diaSemana e sessao.dataFormatada, mas depois notei que meu th:each é com datas e não sessões... -->
-             <span class="db-dia" th:text="${#lists.isEmpty(datas) ? '' :
-                sessao.diaSemana}">
+           th:href="@{/filme/{id}/sessoes/filtrar(id=${filme.id}, data=${data.dtSessao})}"
+           th:class="${data.dtSessao == dataSelecionada} ? 'data-btn active' : 'data-btn'">
+        
+             <span class="db-dia" th:text="${data.diaSemana}">
             </span>
-             <span class="db-data" th:text="${sessao.dataFormatada}"></span>
+             <span class="db-data" th:text="${data.dataFormatada}"></span>
         </a>
 
         
@@ -135,9 +133,8 @@
         </div>
 
          <!-- Nenhuma sessão disponível -->
-        <div class="sem-sessoes"
-             th:if="${!temLeg and !temDub}">
-            <p>Nenhuma sessão disponível para esta data.</p>
+        <div class="sem-sessoes" th:if="${!temLeg and !temDub}">
+            <p>Nenhuma sessão disponível.</p>
         </div>
 
     </div>
