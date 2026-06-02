@@ -1,6 +1,9 @@
 package com.cl.cinelatte.models;
 
 // POJO - Plain Old Java Object
+
+import java.util.Map;
+
 public class Assento {
 
     private int id;
@@ -74,4 +77,15 @@ public class Assento {
     public void setTipo(AssentoTipo tipo) {
         this.tipo = tipo;
     }    
+
+    
+    // Converte um registro do banco (Map) para um objeto Assento
+    public static Assento converterRegistros(Map<String, Object> registro) {
+        int id        = (int) registro.get("id");
+        int salaId    = (int) registro.get("sala_id");
+        String fileira = (String) registro.get("fileira");
+        int numero    = (int) registro.get("numero");
+        AssentoTipo tipo = AssentoTipo.valueOf((String) registro.get("tipo"));
+        return new Assento(id, salaId, fileira, numero, tipo);
+    }
 }

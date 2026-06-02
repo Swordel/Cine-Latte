@@ -1,5 +1,9 @@
 package com.cl.cinelatte.models;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,17 +45,14 @@ public class AssentoDAO {
         return count != null && count > 0;
     }
  
- /*
-    // SELECT todos os assentos de uma sala
-    public List<Assento> listarPorSala(int salaId) {
+    // SELECT todos os assentos de uma sala, ordenados por fileira e número
+    public List<Assento> obterAssentosPorSala(int salaId) {
         String sql = "SELECT * FROM assento WHERE sala_id = ? ORDER BY fileira, numero";
-        return jdbc.query(sql, new Object[]{salaId}, (rs, rowNum) -> new Assento(
-            rs.getInt("id"),
-            rs.getInt("sala_id"),
-            rs.getString("fileira"),
-            rs.getInt("numero"),
-            AssentoTipo.valueOf(rs.getString("tipo"))
-        ));
+        List<Map<String, Object>> listaRegistros = jdbc.queryForList(sql, salaId);
+        ArrayList<Assento> aux = new ArrayList<>();
+        for (Map<String, Object> registro : listaRegistros) {
+            aux.add(Assento.converterRegistros(registro));
+        }
+        return aux;
     }
-*/
 }

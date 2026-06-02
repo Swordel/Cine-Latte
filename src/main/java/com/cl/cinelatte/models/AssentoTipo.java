@@ -4,5 +4,5 @@ public enum AssentoTipo {
     NORMAL,
     CADEIRANTE,
     MOBILIDADE_REDUZIDA,
-    ACOMPANHANTE,
+    ACOMPANHANTE
 }

@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cl.cinelatte.models.Assento;
+import com.cl.cinelatte.models.AssentoService;
 import com.cl.cinelatte.models.DataSessao;
 import com.cl.cinelatte.models.Filme;
 import com.cl.cinelatte.models.FilmeGenero;
 import com.cl.cinelatte.models.FilmeService;
 import com.cl.cinelatte.models.FilmeStatus;
+import com.cl.cinelatte.models.ReservaService;
 import com.cl.cinelatte.models.Sessao;
 import com.cl.cinelatte.models.SessaoIdioma;
 import com.cl.cinelatte.models.SessaoService;
@@ -39,6 +42,7 @@ public class MainController {
         return "index";
     }
 
+    // CADASTRO DE FILMES
    @GetMapping("/filme/cadastro")
     public String formFilme(Model model) {
         model.addAttribute("filme", new Filme());
@@ -53,6 +57,8 @@ public class MainController {
         return "sucesso";
     }
 
+
+    // PÁGINA DE SESSÕES
     /* Anotações da Gaby:
     - A tag {id} é uma variável dinâmica. Quando alguém acessa /filme/123/sessoes, 
     o @PathVariable int id captura o número 123 e o injeta no parâmetro do método,
@@ -140,6 +146,30 @@ public class MainController {
         model.addAttribute("datas", datas);
         model.addAttribute("dataSelecionada", data);
         return "sessoes";
+    }
+
+    //PÁGINA DE ASSENTOS
+
+    @GetMapping("/sessao/{id}/assentos")
+    public String assentos(@PathVariable int id, Model model){
+        SessaoService ss = context.getBean(SessaoService.class);
+        FilmeService  fs = context.getBean(FilmeService.class);
+        AssentoService as = context.getBean(AssentoService.class);
+        ReservaService rs = context.getBean(ReservaService.class);
+
+        Sessao sessao = ss.obterSessao(id); //mando o id da sessão
+        Filme filme = fs.obterFilme(sessao.getFilmeId());
+
+        model.addAttribute("sessao", sessao);
+        model.addAttribute("filme", filme);
+
+        List<Assento> assentos = as.obterAssentosPorSala(sessao.getSalaId());
+        model.addAttribute("assentos", assentos);
+
+        List<Integer> assentosOcupados = rs.obterAssentosOcupadosPorSessao(id);
+        model.addAttribute("assentosOcupados", assentosOcupados);
+
+        return "assentos";
     }
     
 }
