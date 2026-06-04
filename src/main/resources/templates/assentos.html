@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -27,7 +28,129 @@
     <button class="login-btn" onclick="history.back()">VOLTAR</button>
 </header>
 
-<H1>assentos aqui</H1>
+<main>
+
+    <!-- Título -->
+    <h2 class="page-title">Selecione seus assentos</h2>
+
+    <!-- Linha do tempo -->
+    <div class="timeline">
+        <div class="timeline-step active">
+            <div class="step-icon active-icon"><i class="fa-solid fa-couch"></i></div>
+            <span>Assentos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-ticket-simple"></i></div>
+            <span>Ingressos</span>
+        </div>        
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-credit-card"></i></div>
+            <span>Pagamento</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <span>Confirmação</span>
+        </div>
+    </div>
+
+    <!-- Informações da sessão -->
+    <div class="session-info">
+        <div class="session-details">
+            <h3 class="film-title" th:text="${filme.titulo}"></h3>
+            <div class="film-tags">
+                <span th:text="${filme.classificacao}"
+                      th:class="${filme.classificacao == 'L'} ? 'tag tag-livre' :
+                                (${filme.classificacao == '18'} ? 'tag tag-maior' : 'tag tag-cls')">
+                </span>
+                <span class="tag" th:text="${sessao.idioma.name()}"></span>
+                <span class="tag">Sala <span th:text="${sessao.salaId}"></span></span>
+            </div>
+            <p class="film-venue">Cine Latte</p>
+        </div>
+        <div class="session-time">
+            <span class="session-date" th:text="${sessao.dataFormatada}"></span> 
+            <span class="session-hour" th:text="${sessao.horarioFormatado}"></span>
+        </div>
+    </div>
+
+    <!-- Toggle de numeração -->
+    <div class="seat-controls">
+        <label class="toggle-label">
+            <span>Exibir números dos assentos</span>
+            <div class="toggle" id="toggleNumeros">
+                <div class="toggle-thumb"></div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Dados dos assentos vindos do banco (ocultos, lidos pelo JS) -->
+    <div id="assentosDados" style="display:none">
+        <span th:each="a : ${assentos}"
+              th:data-id="${a.id}"
+              th:data-codigo="${a.codigo}"
+              th:data-fileira="${a.fileira}"
+              th:data-numero="${a.numero}"
+              th:data-tipo="${a.tipo.name().toLowerCase()}"
+              th:data-ocupado="${assentosOcupados.contains(a.id)}">
+        </span>
+    </div>
+
+    <!-- Mapa da sala (gerado pelo JS) -->
+    <div class="sala-scroll-wrapper">
+        <div class="sala-wrapper">
+            <div class="sala" id="sala"></div>
+            <div class="tela-wrapper">
+                <div class="tela-bar"></div>
+                <span class="tela-label">TELA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legenda -->
+    <div class="legenda">
+        <div class="legenda-item">
+            <div class="seat-demo disponivel"></div>
+            <span>Disponível</span>
+        </div>
+        <div class="legenda-item">
+            <div class="seat-demo selecionado"></div>
+            <span>Selecionado</span>
+        </div>
+        <div class="legenda-item">
+            <div class="seat-demo ocupado"></div>
+            <span>Ocupado</span>
+        </div>
+        <div class="legenda-item">
+            <div class="seat-demo cadeirante"></div>
+            <span>Cadeirante</span>
+        </div>
+        <div class="legenda-item">
+            <div class="seat-demo mobilidade_reduzida"></div>
+            <span>Mobilidade Reduzida</span>
+        </div>
+        <div class="legenda-item">
+            <div class="seat-demo acompanhante"></div>
+            <span>Acompanhante</span>
+        </div>
+    </div>
+
+</main>
+
+<!-- Barra de seleção fixa no rodapé -->
+<div class="selection-bar">
+    <div class="selected-seats">
+        <span class="selected-label">Assentos selecionados:</span>
+        <span class="selected-list" id="selectedList">—</span>
+    </div>
+    <button class="btn-continuar" id="btnContinuar" disabled>
+        Continuar para ingressos
+    </button>
+</div>
+
+<script th:src="@{/js/assentos.js}"></script>
 
 </body>
 </html>

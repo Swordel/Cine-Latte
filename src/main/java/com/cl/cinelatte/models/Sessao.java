@@ -107,5 +107,12 @@ public class Sessao {
     public String getHorarioFormatado() {
         return horario.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
+
+    // Retorna a data formatada para exibição nas sessões: "26/05" >:D
+    // Copiei de volta pra cá (atualmente já existe no DataSessao.java), 
+    // pois a página de assentos.html puxa direto daqui.
+    public String getDataFormatada() {
+        return dt.format(DateTimeFormatter.ofPattern("dd/MM"));
+    }
     
 }
