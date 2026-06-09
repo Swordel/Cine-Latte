@@ -20,8 +20,9 @@ spans.forEach(span => {
     assentosPorFileira[a.fileira].push(a);
 });
 
-// ── ESTADO ───────────────────────────────────────────────────
+// ── SELECIONADOS ───────────────────────────────────────────────────
 // Um Set é parecido com uma lista, mas não permite duplicados.
+// códigos selecionados: "A1", "C5"...
 const selecionados = new Set();
 
 // ── GERAÇÃO DO MAPA ──────────────────────────────────────────
@@ -107,6 +108,7 @@ function criarBotao(assento) {
     btn.classList.add('seat', assento.ocupado ? 'ocupado' : assento.tipo);
     btn.dataset.codigo = assento.codigo;
     btn.dataset.tipo   = assento.tipo;
+    btn.dataset.id     = assento.id; // id do banco, necessário para a reserva
     btn.textContent    = assento.codigo;
     btn.setAttribute('title', assento.codigo);
     btn.setAttribute('aria-label', 'Assento ' + assento.codigo);
@@ -160,12 +162,29 @@ document.getElementById('toggleNumeros').addEventListener('click', function () {
  </body>
 */
 
-// ── BOTÃO CONTINUAR ───────────────────────────────────────────
+// ── BOTÃO CONTINUAR: submete formulário POST ─────────────────
+// Campos ocultos são gerados dinamicamente e submetidos via form
+// Isso evita a URL feia com ?assentoIds=5&assentoIds=12...
+
 document.getElementById('btnContinuar').addEventListener('click', () => {
-    if (selecionados.size === 0) return;
-    const lista = [...selecionados].sort();
-    // TODO: redirecionar para ingressos
-    alert('Assentos: ' + lista.join(', ') + '\n(Página de ingressos em breve)');
+    if (selecionados.size === 0)
+        return;
+ 
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = '/sessao/' + SESSAO_ID + '/ingressos';
+ 
+    // Adiciona um campo oculto por assento selecionado
+    document.querySelectorAll('.seat.selecionado').forEach(btn => {
+        const input = document.createElement('input');
+        input.type  = 'hidden';
+        input.name  = 'assentoIds';
+        input.value = btn.dataset.id;
+        form.appendChild(input);
+    });
+ 
+    document.body.appendChild(form);
+    form.submit();
 });
 
 // ── INÍCIO ────────────────────────────────────────────────────

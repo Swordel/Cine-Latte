@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS filme (
     duracao       INTEGER,
     classificacao VARCHAR(5),
     nota          NUMERIC(3,1),
-    imagem        VARCHAR(100),
+    imagem        VARCHAR(200),   -- nome do arquivo do pôster (gerado com UUID)
+    banner        VARCHAR(200),   -- nome do arquivo do banner (gerado com UUID)
     status_filme  VARCHAR(10)
 );
 
@@ -43,106 +44,111 @@ CREATE TABLE IF NOT EXISTS sessao (
     idioma    VARCHAR(10)
 );
 
--- Tabela de reservas (liga assento + sessão + status do assento)
--- O mesmo assento pode estar livre em uma sessão e ocupado em outra
+-- Reserva = uma compra (agrupa vários assentos)
 CREATE TABLE IF NOT EXISTS reserva (
-    id             SERIAL PRIMARY KEY,
-    assento_id     INTEGER REFERENCES assento(id),
-    sessao_id      INTEGER REFERENCES sessao(id),
-    status_assento VARCHAR(12)
+    id          SERIAL PRIMARY KEY,
+    sessao_id   INTEGER REFERENCES sessao(id),
+    dt_compra   TIMESTAMP DEFAULT NOW(),
+    valor_total NUMERIC(8,2)
 );
- 
+
+-- ReservaItem = cada assento dentro de uma compra
+CREATE TABLE IF NOT EXISTS reserva_item (
+    id             SERIAL PRIMARY KEY,
+    reserva_id     INTEGER REFERENCES reserva(id),
+    assento_id     INTEGER REFERENCES assento(id),
+    tipo_ingresso  VARCHAR(10),
+    valor          NUMERIC(6,2)
+);
+
 -- == DADOS INICIAIS ==
+-- Os filmes pré-existentes usam imagens que já estão em static/images/
 
 -- Insere filmes apenas se a tabela estiver vazia
-INSERT INTO filme (titulo, sinopse, duracao, classificacao, nota, imagem, status_filme)
+INSERT INTO filme (titulo, sinopse, duracao, classificacao, nota, imagem, banner, status_filme)
 SELECT * FROM (VALUES
-    ('O Diabo Veste Prada 2',
+
+    ('BTS Arirang World Tour',
      'SINOPSE 1',
-     120, '12', 7.1, 'cartazPrada.png', 'EM_CARTAZ'),
+     180, '14', 8.3, 'cartazBTS.webp', 'bannerBTS.webp', 'EM_CARTAZ'),
+
+    ('O Diabo Veste Prada 2',
+     'SINOPSE 2',
+     120, '12', 7.1, 'cartazPrada.png', 'bannerPrada.webp', 'EM_CARTAZ'),
 
     ('Michael',
-     'SINOPSE 2',
-     127, '12', 7.7, 'cartazMichael.webp', 'EM_CARTAZ'),
- 
-    ('Mortal Kombat 2',
      'SINOPSE 3',
-     116, '18', 8.1, 'cartazKombat.webp', 'EM_CARTAZ'),
+     127, '12', 7.7, 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ'),
+
+    ('Mestres do Universo',
+     'SINOPSE 4',
+     123, '14', 9.4, 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ'),
  
     ('Super Mario Galaxy - O Filme',
-     'SINOPSE 4',
-     99, 'L', 9.0, 'cartazMario.jpeg', 'EM_CARTAZ'),
+     'SINOPSE 5',
+     99, 'L', 9.0, 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ'),
  
     ('The Amazing Digital Circus: O Último Ato',
-     'SINOPSE 5',
-     120, 'L', 8.6, 'cartazCircus.jpg', 'EM_CARTAZ'),
+     'SINOPSE 6',
+     120, 'L', 8.6, 'cartazCircus.jpg', 'bannerCircus.png', 'EM_CARTAZ'),
  
     ('O Mandaloriano E Grogu',
-     'SINOPSE 6',
-     132, '14', 9.1, 'cartazMandalorian.jpg', 'EM_CARTAZ'),
- 
-    ('As Ovelhas Detetives',
      'SINOPSE 7',
-     109, '12', 8.4, 'cartazOvelha.webp', 'EM_CARTAZ'),
- 
-    ('Na Zona Cinzenta',
+     132, '14', 9.1, 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ'),
+
+    ('Obsessão',
      'SINOPSE 8',
-     98, '14', 8.3, 'cartazZona.jpg', 'EM_CARTAZ'),
- 
-    ('Top Gun: Ases Indomáveis - 40º Aniversário',
-     'SINOPSE 9',
-     110, '12', 9.3, 'cartazTOPGUN.webp', 'EM_CARTAZ'),
+     108, '18', 8.1, 'cartazObs.jpg', NULL, 'EM_CARTAZ'),
  
     ('Interstellar',
-     'SINOPSE 10',
-     169, '10', 9.5, 'cartazInterstellar.jpg', 'EM_CARTAZ'),
+     'SINOPSE 9',
+     169, '10', 9.5, 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ'),
 
      ('Good Omens 3',
-     'SINOPSE 11',
-     90, '16', 8.2, 'breveGoodOmens.jpg', 'EM_BREVE'),
+     'SINOPSE 10',
+     90, '16', 8.2, 'breveGoodOmens.jpg', NULL, 'EM_BREVE'),
  
     ('Luigi`s Mansion - O Filme',
-     'SINOPSE 12',
-     90, 'L', 9.7, 'breveLuigi.jpg', 'EM_BREVE'),
+     'SINOPSE 11',
+     90, 'L', 9.7, 'breveLuigi.jpg', NULL, 'EM_BREVE'),
  
     ('Caramelo - Um Filme Netflix',
      'SINOPSE 12',
-     95, '12', 10.0, 'breveCaramelo.jpg', 'EM_BREVE'),
+     95, '12', 10.0, 'breveCaramelo.jpg', NULL, 'EM_BREVE'),
 
      ('Avengers Endgame - Reboot 2026',
-     'SINOPSE 14',
-     181, '12', 10.0, 'breveAvengers.webp', 'EM_BREVE'),
+     'SINOPSE 13',
+     181, '12', 10.0, 'breveAvengers.webp', NULL, 'EM_BREVE'),
 
      ('Demon Slayer - Castelo Infinito',
-     'SINOPSE 15',
-     155, '18', 9.5, 'breveDemonSlayer.jpg', 'EM_BREVE'),
+     'SINOPSE 14',
+     155, '18', 9.5, 'breveDemonSlayer.jpg', NULL, 'EM_BREVE'),
 
      ('Totoro',
-     'SINOPSE 16',
-     86, 'L', 9.8, 'breveTotoro.jpg', 'EM_BREVE')
+     'SINOPSE 15',
+     86, 'L', 9.8, 'breveTotoro.jpg', NULL, 'EM_BREVE')
 
-) AS novos(titulo, sinopse, duracao, classificacao, nota, imagem, status_filme)
+) AS novos(titulo, sinopse, duracao, classificacao, nota, imagem, banner, status_filme)
 WHERE NOT EXISTS (SELECT 1 FROM filme LIMIT 1);
 
 -- Insere gêneros dos filmes apenas se filme_genero estiver vazia
 INSERT INTO filme_genero (id_filme, genero)
 SELECT * FROM (VALUES
-    (1, 'COMEDIA'), (1, 'DRAMA'),
-    (2, 'DRAMA'), (2, 'MUSICAL'),
-    (3, 'ACAO'), (3, 'AVENTURA'),
-    (4, 'ANIMACAO'), (4, 'AVENTURA'),
-    (5, 'ANIMACAO'), (5, 'FICCAO_CIENTIFICA'),
-    (6, 'ACAO'), (6, 'FICCAO_CIENTIFICA'),
-    (7, 'COMEDIA'),
-    (8, 'ACAO'),
-    (9, 'ACAO'), (9, 'AVENTURA'),
-    (10, 'DRAMA'), (10, 'FICCAO_CIENTIFICA'),
-    (11, 'DRAMA'),
-    (12, 'ANIMACAO'), (12, 'AVENTURA'),
-    (13, 'COMEDIA'), (13, 'DRAMA'),
-    (14, 'ACAO'), (14, 'FICCAO_CIENTIFICA'),
-    (15, 'ACAO'), (15, 'ANIMACAO'),
-    (16, 'FANTASIA'), (16, 'AVENTURA')
+    (1, 'MUSICAL'), 
+    (2, 'DRAMA'), (2, 'COMEDIA'),
+    (3, 'DRAMA'), (3, 'MUSICAL'),
+    (4, 'ACAO'), (4, 'FANTASIA'),
+    (5, 'ANIMACAO'), (5, 'AVENTURA'),
+    (6, 'ANIMACAO'), (6, 'FICCAO_CIENTIFICA'),
+    (7, 'ACAO'), (7, 'FICCAO_CIENTIFICA'),
+    (8, 'TERROR'),
+    (9, 'DRAMA'), (9, 'FICCAO_CIENTIFICA'),
+    (10, 'DRAMA'),
+    (11, 'ANIMACAO'), (11, 'AVENTURA'),
+    (12, 'COMEDIA'), (12, 'DRAMA'),
+    (13, 'ACAO'), (13, 'FICCAO_CIENTIFICA'),
+    (14, 'ACAO'), (14, 'ANIMACAO'),
+    (15, 'FANTASIA'), (15, 'AVENTURA'), (15, 'ANIMACAO')
 ) AS fg(id_filme, genero)
 WHERE NOT EXISTS (SELECT 1 FROM filme_genero LIMIT 1);
 

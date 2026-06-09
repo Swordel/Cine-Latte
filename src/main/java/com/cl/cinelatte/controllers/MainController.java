@@ -1,12 +1,22 @@
 package com.cl.cinelatte.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.cl.cinelatte.models.Assento;
 import com.cl.cinelatte.models.AssentoService;
@@ -30,6 +41,9 @@ import com.cl.cinelatte.models.SessaoService;
 @Controller
 public class MainController {
 
+    // Pasta onde os uploads serão salvos 
+    private static final String UPLOAD_DIR = "./uploads";
+
    @Autowired
    ApplicationContext context;
 
@@ -42,7 +56,7 @@ public class MainController {
         return "index";
     }
 
-    // CADASTRO DE FILMES
+    // ========= CADASTRO DE FILMES =========
    @GetMapping("/filme/cadastro")
     public String formFilme(Model model) {
         model.addAttribute("filme", new Filme());
@@ -50,15 +64,113 @@ public class MainController {
         return "formfilme";
     }
 
-   @PostMapping("/filme/cadastro")
-    public String cadastrarFilme(@ModelAttribute Filme filme, @RequestParam List<FilmeGenero> generos, Model model) {
+   // Agora recebe MultipartFile para pôster e banner
+    @PostMapping("/filme/cadastro")
+    public String cadastrarFilme(
+            @ModelAttribute Filme filme,
+            @RequestParam List<FilmeGenero> generos,
+            @RequestParam("poster") MultipartFile poster,
+            @RequestParam("bannerFile") MultipartFile bannerFile,
+            Model model) throws IOException {
+ 
+        // Salva o pôster e guarda o nome no objeto filme
+        String nomePoster = salvarArquivo(poster);
+        filme.setImagem(nomePoster);
+ 
+        // Salva o banner e guarda o nome no objeto filme
+        String nomeBanner = salvarArquivo(bannerFile);
+        filme.setBanner(nomeBanner);
+ 
         FilmeService fs = context.getBean(FilmeService.class);
         fs.inserirFilme(filme, generos);
+ 
         return "sucesso";
     }
 
+    /*
+    Método auxiliar: salva um MultipartFile na pasta ./uploads/
+    e retorna o nome único gerado para o arquivo.
+     
+    Por que UUID + nome original?
+    - UUID evita colisão (dois usuários subindo "poster.jpg" não se sobrescrevem)
+    - Manter o nome original facilita identificar o arquivo
+    */
+   
+    private String salvarArquivo(MultipartFile arquivo) throws IOException {
 
-    // PÁGINA DE SESSÕES
+        // Garante que a pasta uploads existe (cria se não existir)
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+ 
+        // Gera um nome único para o arquivo
+        String nomeOriginal = arquivo.getOriginalFilename();
+        String nomeUnico = UUID.randomUUID() + "_" + nomeOriginal;
+ 
+        // Copia o conteúdo do upload para o destino
+        Path destino = uploadPath.resolve(nomeUnico);
+        Files.copy(arquivo.getInputStream(), destino);
+ 
+        return nomeUnico; // isso é o que vai ser salvo no banco
+    }
+
+    /*
+    Endpoint unificado para servir imagens de filmes.
+    
+    Funciona assim:
+    1. Procura o arquivo em ./uploads/        (filmes novos, enviados pelo formulario)
+    2. Se nao achar, procura em static/images/ (filmes antigos, ja existentes no projeto)
+    3. Se nao achar em nenhum dos dois, retorna 404
+    
+    Isso permite apontar TODOS os th:src para /uploads/{nome},
+    tanto para filmes antigos quanto novos, sem precisar mudar o banco
+    nem ter duas URLs diferentes no HTML.
+    
+    Uso no Thymeleaf: th:src="@{/uploads/{nome}(nome=${filme.imagem})}"
+    */
+    @GetMapping("/uploads/{nomeArquivo}")
+    public ResponseEntity<Resource> servirImagem(@PathVariable String nomeArquivo) throws IOException {
+ 
+        // 1a tentativa: arquivo enviado pelo formulario, salvo em ./uploads/
+        Path caminhoUpload = Paths.get(UPLOAD_DIR).resolve(nomeArquivo);
+        
+        if (Files.exists(caminhoUpload)) {
+            Resource resource = new FileSystemResource(caminhoUpload);
+            String contentType = Files.probeContentType(caminhoUpload);
+
+            if (contentType == null)
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(resource);
+        }
+ 
+        // 2a tentativa: imagem antiga dentro de static/images/ (empacotada no .jar)
+        // ClassPathResource busca dentro do classpath, que inclui a pasta static/
+        Resource resourceStatic = new ClassPathResource("static/images/" + nomeArquivo);
+
+        if (resourceStatic.exists()) {
+            String contentType = Files.probeContentType(Paths.get(nomeArquivo));
+
+            if (contentType == null)
+                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(resourceStatic);
+        }
+ 
+        // Nao encontrou em nenhum dos dois lugares
+        return ResponseEntity.notFound().build();
+    }
+
+
+
+
+
+    // ========= PÁGINA DAS SESSÕES =========
     /* Anotações da Gaby:
     - A tag {id} é uma variável dinâmica. Quando alguém acessa /filme/123/sessoes, 
     o @PathVariable int id captura o número 123 e o injeta no parâmetro do método,
@@ -148,7 +260,7 @@ public class MainController {
         return "sessoes";
     }
 
-    //PÁGINA DE ASSENTOS
+    // ========= PÁGINA DE ASSENTOS ===============
 
     @GetMapping("/sessao/{id}/assentos")
     public String assentos(@PathVariable int id, Model model){
@@ -171,5 +283,33 @@ public class MainController {
 
         return "assentos";
     }
+
+
+/*
+    // ========= INGRESSOS ======
+    // Recebe os assentoIds via POST vindo do formulário da página de assentos
+    // Os ids fluem por campos ocultos — sem HttpSession, mas tbm sem URL feia
+    
+    @PostMapping("/sessao/{id}/ingressos")
+    public String ingressos(@PathVariable int sessaoId, @RequestParam List<Integer> assentoIds, Model model) {
+
+        SessaoService ss = context.getBean(SessaoService.class);
+        FilmeService fs = context.getBean(FilmeService.class);
+        AssentoService as = context.getBean(AssentoService.class);
+
+        Sessao sessao = ss.obterSessao(sessaoId);
+        Filme filme = fs.obterFilme(sessao.getFilmeId());
+        List<String> codigosAssentos = as.obterCodigosPorIds(assentoIds); //preciso implementar
+ 
+        model.addAttribute("sessao", sessao);
+        model.addAttribute("filme", filme);
+        model.addAttribute("assentoIds", assentoIds);
+        model.addAttribute("totalAssentos", assentoIds.size());  // total para validação no JS
+        model.addAttribute("codigosAssentos", codigosAssentos); 
+        model.addAttribute("precoInteira", TipoIngresso.INTEIRA.getPreco());
+        model.addAttribute("precoMeia", TipoIngresso.MEIA.getPreco());
+        return "ingressos";
+    }
+*/
     
 }

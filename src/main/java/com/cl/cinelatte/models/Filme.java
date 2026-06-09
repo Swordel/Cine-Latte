@@ -12,6 +12,7 @@ public class Filme {
     private String classificacao;
     private double nota;
     private String imagem;   // ex.:nome do pôster: "cartazPrada.png"
+    private String banner;  // nome do arquivo do banner, ex.: "bannerPrada.webp"
     private FilmeStatus status;   // apenas "EM_CARTAZ" ou "EM_BREVE"
     private List<FilmeGenero> generos; // preenchido separadamente via filme_genero
 
@@ -20,19 +21,20 @@ public class Filme {
 
     // Construtor para INSERT (sem id e sem o gênero)
     public Filme(String titulo, String sinopse, int duracao,
-                 String classificacao, double nota, String imagem, FilmeStatus status) {
+                 String classificacao, double nota, String imagem, String banner, FilmeStatus status) {
         this.titulo = titulo;
         this.sinopse = sinopse;
         this.duracao = duracao;
         this.classificacao = classificacao;
         this.nota = nota;
         this.imagem = imagem;
+        this.banner = banner;
         this.status = status;
     }
 
     // Construtor para SELECT (com id, sem generos -> generos são carregados separados)
     public Filme(int id, String titulo, String sinopse, int duracao,
-                 String classificacao, double nota, String imagem, FilmeStatus status) {
+                 String classificacao, double nota, String imagem, String banner, FilmeStatus status) {
         this.id = id;
         this.titulo = titulo;
         this.sinopse = sinopse;
@@ -40,6 +42,7 @@ public class Filme {
         this.classificacao = classificacao;
         this.nota = nota;
         this.imagem = imagem;
+        this.banner = banner;
         this.status = status;
     }
 
@@ -70,6 +73,10 @@ public class Filme {
 
     public String getImagem() {
         return imagem;
+    }
+
+    public String getBanner() {
+        return banner;
     }
 
     public FilmeStatus getStatus() {
@@ -109,6 +116,10 @@ public class Filme {
         this.imagem = imagem;
     }
 
+    public void setBanner(String banner) {
+        this.banner = banner;
+    }
+
     public void setStatus(FilmeStatus status) {
         this.status = status;
     }
@@ -126,8 +137,9 @@ public class Filme {
         String classificacao = (String) registro.get("classificacao");
         double nota          = ((Number) registro.get("nota")).doubleValue();
         String imagem        = (String) registro.get("imagem");
+        String banner        = (String) registro.get("banner");
         FilmeStatus status   = FilmeStatus.valueOf((String) registro.get("status_filme"));
-        return new Filme(id, titulo, sinopse, duracao, classificacao, nota, imagem, status);
+        return new Filme(id, titulo, sinopse, duracao, classificacao, nota, imagem, banner, status);
     }
 
     // Retorna a duração formatada: 130 -> "2h 10min"

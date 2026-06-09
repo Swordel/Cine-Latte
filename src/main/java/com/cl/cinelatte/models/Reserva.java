@@ -1,62 +1,87 @@
 package com.cl.cinelatte.models;
 
+import java.time.LocalDateTime;
+
 // POJO - Plain Old Java Object
-// Liga um assento a uma sessão com um status
+// Editado: Reserva representa uma compra -> uma reserva pode ter vários assentos/itens (ReservaItem)
 public class Reserva {
 
     private int id;
-    private int assentoId;
     private int sessaoId;
-    private ReservaStatus status;
+    private LocalDateTime dtCompra;
+    private double valorTotal;
+    private FormaPagamento formaPagamento;
+    private boolean pago;
 
     // Construtor vazio
     public Reserva() {}
 
-    // Construtor para INSERT (sem id)
-    public Reserva(int assentoId, int sessaoId, ReservaStatus status) {
-        this.assentoId = assentoId;
-        this.sessaoId = sessaoId;
-        this.status = status;
+    // Construtor para INSERT (sem id e sem dtCompra, pq o banco preenche com NOW())
+    public Reserva(int sessaoId, double valorTotal, FormaPagamento formaPagamento) {
+        this.sessaoId   = sessaoId;
+        this.valorTotal = valorTotal;
+        this.formaPagamento = formaPagamento;
+        this.pago = true; // pagamento fake: sempre aprovado
     }
 
-    // Construtor para SELECT (com id)
-    public Reserva(int id, int assentoId, int sessaoId, ReservaStatus status) {
+    // Construtor para SELECT (com id e dtCompra)
+    public Reserva(int id, int sessaoId, LocalDateTime dtCompra, double valorTotal, FormaPagamento formaPagamento, boolean pago) {
         this.id = id;
-        this.assentoId = assentoId;
         this.sessaoId = sessaoId;
-        this.status = status;
+        this.dtCompra = dtCompra;
+        this.valorTotal = valorTotal;
+        this.formaPagamento = formaPagamento;
+        this.pago = pago;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getAssentoId() {
-        return assentoId;
-    }
-
     public int getSessaoId() {
         return sessaoId;
     }
 
-    public ReservaStatus getStatus() {
-        return status;
+    public LocalDateTime getDtCompra() {
+        return dtCompra;
+    }
+
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public FormaPagamento getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public boolean isPago() {
+        return pago;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setAssentoId(int assentoId) {
-        this.assentoId = assentoId;
-    }
-
     public void setSessaoId(int sessaoId) {
         this.sessaoId = sessaoId;
     }
 
-    public void setStatus(ReservaStatus status) {
-        this.status = status;
+    public void setDtCompra(LocalDateTime dtCompra) {
+        this.dtCompra = dtCompra;
     }
+
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
+    }
+
+    public void setFormaPagamento(FormaPagamento formaPagamento) {
+        this.formaPagamento = formaPagamento;
+    }
+
+    public void setPago(boolean pago) {
+        this.pago = pago;
+    }
+
+
 
 }

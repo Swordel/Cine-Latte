@@ -36,8 +36,6 @@ public class AssentoDAO {
         jdbc.update(sql, obj);
     }
 
-    //VERIFICAR OS 2 DEBAIXO
-
      // Verifica se já existem assentos para uma sala
     public boolean existeAssentoNaSala(int salaId) {
         String sql = "SELECT COUNT(*) FROM assento WHERE sala_id = ?";

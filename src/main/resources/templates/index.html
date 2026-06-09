@@ -78,7 +78,7 @@
  
             <a th:each="filme : ${filmesEmCartaz}" th:href="@{/filme/{id}/sessoes(id=${filme.id})}" class="movie-card">
                 <div class="movie-poster">
-                    <img th:src="@{/images/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
+                    <img th:src="@{/uploads/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
                     <span class="movie-rating" th:text="${filme.nota}"></span>
                 </div>
 
@@ -113,7 +113,7 @@
            <a th:each="filme : ${filmesEmBreve}" th:href="@{/filme/{id}/sessoes(id=${filme.id})}" class="movie-card">
              
             <div class="movie-poster">
-                   <img th:src="@{/images/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
+                   <img th:src="@{/uploads/{img}(img=${filme.imagem})}" th:alt="${filme.titulo}">
                 </div>
 
                 <div class="movie-info">

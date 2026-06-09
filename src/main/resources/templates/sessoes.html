@@ -31,7 +31,7 @@
 <!-- ========== HERO DO FILME ========== -->
 <section class="filme-hero">
 
-    <div class="filme-hero-bg" th:style="'background-image: url(' + @{/images/bannerPrada.webp} + ')'"></div>
+    <div class="filme-hero-bg" th:style="'background-image: url(' + @{/uploads/{b}(b=${filme.banner})} + ')'"></div>
     <div class="filme-hero-overlay"></div>
 
     <!-- Conteúdo do hero -->
@@ -72,7 +72,7 @@
         <!-- Coluna direita: pôster -->
         <div class="filme-poster-wrapper">
             <img class="filme-poster"
-                 th:src="@{/images/{img}(img=${filme.imagem})}"
+                 th:src="@{/uploads/{img}(img=${filme.imagem})}"
                  th:alt="${filme.titulo}">
         </div>
 

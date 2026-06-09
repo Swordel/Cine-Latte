@@ -32,7 +32,7 @@
     <div class="form-wrapper">
         <h2 class="form-title">Cadastro de Filme</h2>
  
-        <form action="#" th:action="@{/filme/cadastro}" method="post" th:object="${filme}" class="form-card">
+        <form action="#" th:action="@{/filme/cadastro}" method="post" th:object="${filme}" enctype="multipart/form-data" class="form-card">
  
             <div class="form-group">
                 <label>Título</label>
@@ -86,10 +86,27 @@
             </div>
  
             <div class="form-row">
+                <!--
+                    Campo de upload do pôster.
+                    - type="file" abre o seletor de arquivo do sistema operacional
+                    - accept="image/*" filtra para mostrar só imagens
+                    - name="poster" deve ser IGUAL ao @RequestParam("poster") no Controller
+                    - NÃO usa th:field aqui, porque MultipartFile não é um campo do objeto Filme
+                -->
                 <div class="form-group">
-                    <label>Pôster (nome do arquivo)</label>
-                    <input type="text" th:field="*{imagem}" placeholder="Ex: cartazPrada.png">
+                    <label>Pôster do Filme</label>
+                    <input type="file" name="poster" accept="image/*" required>
                 </div>
+
+                 <!--
+                    Campo de upload do banner.
+                    - name="bannerFile" deve ser IGUAL ao @RequestParam("bannerFile") no Controller
+                -->
+                <div class="form-group">
+                    <label>Banner do Filme</label>
+                    <input type="file" name="bannerFile" accept="image/*" required>
+                </div>
+
             </div>
  
             <button type="submit" class="submit-btn">CADASTRAR FILME</button>

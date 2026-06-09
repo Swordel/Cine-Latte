@@ -28,15 +28,16 @@ public class FilmeDAO {
     // INSERT: deixou de ser void e agora retorna o id gerado para uso na filme_genero
     // pois um filme pode ter muitos generos e vice-versa, então fiz a tabela assim.
     public int inserirFilme(Filme filme) {
-        String sql = "INSERT INTO filme(titulo, sinopse, duracao, classificacao, nota, imagem, status_filme) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        Object[] obj = new Object[7];
-        obj[0] = (String) filme.getTitulo();
-        obj[1] = (String) filme.getSinopse();
+        String sql = "INSERT INTO filme(titulo, sinopse, duracao, classificacao, nota, imagem, banner, status_filme) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        Object[] obj = new Object[8];
+        obj[0] = filme.getTitulo();
+        obj[1] = filme.getSinopse();
         obj[2] = filme.getDuracao();
-        obj[3] = (String) filme.getClassificacao();
+        obj[3] = filme.getClassificacao();
         obj[4] = filme.getNota();
-        obj[5] = (String) filme.getImagem();
-        obj[6] = filme.getStatus().name();  // .name() retorna "EM_CARTAZ" ou "EM_BREVE"
+        obj[5] = filme.getImagem();
+        obj[6] = filme.getBanner();
+        obj[7] = filme.getStatus().name();  // .name() retorna "EM_CARTAZ" ou "EM_BREVE"
         jdbc.update(sql, obj);
 
         // Busca o id gerado pelo banco

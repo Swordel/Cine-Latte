@@ -13,7 +13,6 @@ public class AssentoService {
 
     public List<Assento> obterAssentosPorSala(int salaId){
         return assentoDAO.obterAssentosPorSala(salaId);
-
     }
 
 }
