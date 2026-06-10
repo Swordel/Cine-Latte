@@ -37,6 +37,9 @@ import com.cl.cinelatte.models.ReservaService;
 import com.cl.cinelatte.models.Sessao;
 import com.cl.cinelatte.models.SessaoIdioma;
 import com.cl.cinelatte.models.SessaoService;
+import com.cl.cinelatte.models.TipoIngresso;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
@@ -284,32 +287,87 @@ public class MainController {
         return "assentos";
     }
 
-
-/*
-    // ========= INGRESSOS ======
-    // Recebe os assentoIds via POST vindo do formulário da página de assentos
-    // Os ids fluem por campos ocultos — sem HttpSession, mas tbm sem URL feia
     
-    @PostMapping("/sessao/{id}/ingressos")
-    public String ingressos(@PathVariable int sessaoId, @RequestParam List<Integer> assentoIds, Model model) {
+    // POST: recebe os assentos selecionados, salva na sessão HTTP e redireciona
+    @PostMapping("/sessao/{id}/assentos")
+    public String selecionarAssentos(@PathVariable int id,
+                                      @RequestParam List<Integer> assentoIds,
+                                      HttpSession session) {
+        session.setAttribute("sessaoId", id);
+        session.setAttribute("assentoIds", assentoIds);
+        return "redirect:/sessao/" + id + "/ingressos";
+    }
+    
 
+    // ========= INGRESSOS ======
+   
+    @GetMapping("/sessao/{id}/ingressos")
+    public String ingressos(@PathVariable int id, HttpSession session, Model model) {
+        // Recupera assentos salvos na sessão HTTP
+        @SuppressWarnings("unchecked")
+        List<Integer> assentoIds = (List<Integer>) session.getAttribute("assentoIds");
+        Integer sessaoIdSession = (Integer) session.getAttribute("sessaoId");
+
+        if (sessaoIdSession == null || !sessaoIdSession.equals(id)) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+
+        // "Segurança": se não há assentos na sessão, volta para a seleção
+        if (assentoIds == null || assentoIds.isEmpty()) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+        
         SessaoService ss = context.getBean(SessaoService.class);
         FilmeService fs = context.getBean(FilmeService.class);
         AssentoService as = context.getBean(AssentoService.class);
 
-        Sessao sessao = ss.obterSessao(sessaoId);
+        Sessao sessao = ss.obterSessao(id);
         Filme filme = fs.obterFilme(sessao.getFilmeId());
-        List<String> codigosAssentos = as.obterCodigosPorIds(assentoIds); //preciso implementar
- 
+        List<Assento> assentosSelecionados = as.obterAssentosSelecionados(assentoIds);
+
         model.addAttribute("sessao", sessao);
         model.addAttribute("filme", filme);
-        model.addAttribute("assentoIds", assentoIds);
-        model.addAttribute("totalAssentos", assentoIds.size());  // total para validação no JS
-        model.addAttribute("codigosAssentos", codigosAssentos); 
+        model.addAttribute("totalAssentos", assentoIds.size());
+        model.addAttribute("assentos", assentosSelecionados);
         model.addAttribute("precoInteira", TipoIngresso.INTEIRA.getPreco());
         model.addAttribute("precoMeia", TipoIngresso.MEIA.getPreco());
         return "ingressos";
     }
-*/
+
+    @PostMapping("/sessao/{id}/ingressos")
+    public String confirmarIngressos(@PathVariable int id, @RequestParam int qtdInteira, @RequestParam int qtdMeia, HttpSession session) {
+        session.setAttribute("qtdInteira", qtdInteira);
+        session.setAttribute("qtdMeia", qtdMeia);
+
+        return "redirect:/sessao/" + id + "/pagamento";
+    }
+
+    // == PAGAMENTO ~~~
+    @GetMapping("/sessao/{id}/pagamento")
+    public String pagamento(@PathVariable int id, HttpSession session, Model model) {
+
+        @SuppressWarnings("unchecked")
+        List<Integer> assentoIds = (List<Integer>) session.getAttribute("assentoIds");
+        Integer sessaoIdSession = (Integer) session.getAttribute("sessaoId");
+        Integer qtdInteira = (Integer) session.getAttribute("qtdInteira");
+        Integer qtdMeia = (Integer) session.getAttribute("qtdMeia");
+
+        if (sessaoIdSession == null || !sessaoIdSession.equals(id)) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+
+        if (assentoIds == null || assentoIds.isEmpty()) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+
+        if (qtdInteira == null || qtdMeia == null) {
+            return "redirect:/sessao/" + id + "/ingressos";
+        }
+
+        model.addAttribute("qtdInteira", qtdInteira);
+        model.addAttribute("qtdMeia", qtdMeia);
+
+        return "pagamento";
+    }
     
 }

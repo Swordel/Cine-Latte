@@ -172,7 +172,7 @@ document.getElementById('btnContinuar').addEventListener('click', () => {
  
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/sessao/' + SESSAO_ID + '/ingressos';
+    form.action = '/sessao/' + SESSAO_ID + '/assentos';
  
     // Adiciona um campo oculto por assento selecionado
     document.querySelectorAll('.seat.selecionado').forEach(btn => {

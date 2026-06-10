@@ -53,4 +53,14 @@ public class AssentoDAO {
         }
         return aux;
     }
+
+    //SELECT de assentos por IDs selecionados, pois na página de ingressos preciso obter o código deles!!
+    // Eu ía fazer assim: public List<Assento> obterAssentos(List<Integer> ids){ ...}
+    // para fazer apenas 1 consulta no banco, mas precisa de placeholders que ainda não entendi bem, então evitei.
+        public Assento obterAssento(int id){
+        String sql = "SELECT * FROM assento WHERE id = ?";
+        Map<String, Object> registro = jdbc.queryForMap(sql, id);
+        return Assento.converterRegistros(registro);
+    }
+
 }

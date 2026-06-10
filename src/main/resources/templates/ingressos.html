@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingressos — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/ingressos.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <button class="login-btn" onclick="history.back()">VOLTAR</button>
+</header>
+
+<main>
+
+    <!-- Linha do tempo -->
+    <div class="timeline">
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-couch"></i></div>
+            <span>Assentos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step active">
+            <div class="step-icon active-icon"><i class="fa-solid fa-ticket-simple"></i></div>
+            <span>Ingressos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-credit-card"></i></div>
+            <span>Pagamento</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <span>Confirmação</span>
+        </div>
+    </div>
+
+    <div class="page-layout">
+
+        <!-- ── COLUNA ESQUERDA: seleção de ingressos ── -->
+        <div class="coluna-ingressos">
+            <h2 class="section-title">Escolha os tipos de ingresso</h2>
+
+                <!-- Card Inteira -->
+                <div class="ingresso-card" id="cardInteira">
+                    <div class="ingresso-info">
+                        <div class="ingresso-tipo">Inteira</div>
+                        <div class="ingresso-preco"
+                             th:text="'R$ ' + ${#numbers.formatDecimal(precoInteira, 1, 'POINT', 2, 'COMMA')}">
+                        </div>
+                    </div>
+
+                    <div class="ingresso-counter">
+                        <button type="button" class="counter-btn" id="btnMinusInteira">−</button>
+                        <span class="counter-valor" id="valInteira">0</span>
+                        <button type="button" class="counter-btn" id="btnPlusInteira">+</button>
+                    </div>
+                </div>
+                
+
+                <!-- Card Meia -->
+                <div class="ingresso-card" id="cardMeia">
+                    <div class="ingresso-info">
+                        <div class="ingresso-tipo">Meia-entrada</div>
+                        <div class="ingresso-preco"
+                             th:text="'R$ ' + ${#numbers.formatDecimal(precoMeia, 1, 'POINT', 2, 'COMMA')}">
+                        </div>
+                    </div>
+                    <div class="ingresso-counter">
+                        <button type="button" class="counter-btn" id="btnMinusMeia">−</button>
+                        <span class="counter-valor" id="valMeia">0</span>
+                        <button type="button" class="counter-btn" id="btnPlusMeia">+</button>
+                    </div>
+                </div>
+        </div>
+
+        <!-- ── COLUNA DIREITA: resumo do pedido ── -->
+        <div class="coluna-resumo">
+            <h3 class="resumo-titulo">Resumo do pedido</h3>
+
+            <!-- Mini pôster + info do filme -->
+            <div class="resumo-filme">
+                <img class="resumo-poster"
+                     th:src="@{/images/{img}(img=${filme.imagem})}"
+                     th:alt="${filme.titulo}">
+                <div class="resumo-filme-info">
+                    <div class="resumo-filme-titulo" th:text="${filme.titulo}"></div>
+                    <div class="resumo-tags">
+                        <span th:text="${filme.classificacao}"
+                              th:class="${filme.classificacao == 'L'} ? 'tag tag-livre' :
+                                        (${filme.classificacao == '18'} ? 'tag tag-maior' : 'tag tag-cls')">
+                        </span>
+                        <span class="tag" th:text="${sessao.idioma.name()}"></span>
+                    </div>
+                    <div class="resumo-sessao">
+                        Sala <span th:text="${sessao.salaId}"></span>
+                        · <span th:text="${sessao.dataFormatada}"></span>
+                        · <span th:text="${sessao.horarioFormatado}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <!-- Assentos selecionados -->
+            <div class="resumo-row">
+                <span class="resumo-label">Assentos</span>
+                <span class="resumo-valor">
+                        <span th:each="assento, i : ${assentos}">
+                            <span th:if="${!i.first}">, </span>
+                                <span th:text="${assento.codigo}"></span>
+                        </span>
+                </span>
+                
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <!-- Ingressos (atualizados dinamicamente pelo JS) -->
+            <div class="resumo-row" id="resumoInteiraRow" style="display:none">
+                <span class="resumo-label" id="resumoInteiraLabel"></span>
+                <span class="resumo-valor" id="resumoInteiraValor"></span>
+            </div>
+
+            <div class="resumo-row" id="resumoMeiaRow" style="display:none">
+                <span class="resumo-label" id="resumoMeiaLabel"></span>
+                <span class="resumo-valor" id="resumoMeiaValor"></span>
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <!-- Total -->
+            <div class="resumo-row resumo-total">
+                <span class="resumo-label">Total</span>
+                <span class="resumo-valor" id="resumoTotal">R$ 0,00</span>
+            </div>
+
+            <!-- Botão continuar -->
+            <button type="button" class="btn-continuar" id="btnContinuar" disabled>
+            Ir para pagamento
+            </button>
+
+        </div>
+    </div>
+
+</main>
+
+<!-- Dados do Thymeleaf para o JS -->
+<script th:inline="javascript">
+    const TOTAL_ASSENTOS = /*[[${totalAssentos}]]*/ 0;
+    const PRECO_INTEIRA  = /*[[${precoInteira}]]*/ 30.0;
+    const PRECO_MEIA     = /*[[${precoMeia}]]*/ 15.0;
+</script>
+<script th:src="@{/js/ingressos.js}"></script>
+
+</body>
+</html>
