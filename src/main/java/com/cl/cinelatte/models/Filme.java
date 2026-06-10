@@ -1,5 +1,6 @@
 package com.cl.cinelatte.models;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -8,42 +9,42 @@ public class Filme {
     private int id;
     private String titulo;
     private String sinopse;
-    private int duracao; //vou preencher em minutos e depois converto pra horas pra exibir
+    private Integer duracao; //vou preencher em minutos e depois converto pra horas pra exibir
     private String classificacao;
-    private double nota;
     private String imagem;   // ex.:nome do pôster: "cartazPrada.png"
     private String banner;  // nome do arquivo do banner, ex.: "bannerPrada.webp"
     private FilmeStatus status;   // apenas "EM_CARTAZ" ou "EM_BREVE"
+    private LocalDate dataEstreia;
     private List<FilmeGenero> generos; // preenchido separadamente via filme_genero
 
     // Construtor vazio
     public Filme() {}
 
     // Construtor para INSERT (sem id e sem o gênero)
-    public Filme(String titulo, String sinopse, int duracao,
-                 String classificacao, double nota, String imagem, String banner, FilmeStatus status) {
+    public Filme(String titulo, String sinopse, Integer duracao,
+                 String classificacao, String imagem, String banner, FilmeStatus status, LocalDate dataEstreia) {
         this.titulo = titulo;
         this.sinopse = sinopse;
         this.duracao = duracao;
         this.classificacao = classificacao;
-        this.nota = nota;
         this.imagem = imagem;
         this.banner = banner;
         this.status = status;
+        this.dataEstreia = dataEstreia;
     }
 
     // Construtor para SELECT (com id, sem generos -> generos são carregados separados)
-    public Filme(int id, String titulo, String sinopse, int duracao,
-                 String classificacao, double nota, String imagem, String banner, FilmeStatus status) {
+    public Filme(int id, String titulo, String sinopse, Integer duracao,
+                 String classificacao, String imagem, String banner, FilmeStatus status, LocalDate dataEstreia) {
         this.id = id;
         this.titulo = titulo;
         this.sinopse = sinopse;
         this.duracao = duracao;
         this.classificacao = classificacao;
-        this.nota = nota;
         this.imagem = imagem;
         this.banner = banner;
         this.status = status;
+        this.dataEstreia = dataEstreia;
     }
 
     // Getters
@@ -59,16 +60,12 @@ public class Filme {
         return sinopse;
     }
 
-    public int getDuracao() {
+    public Integer getDuracao() {
         return duracao;
     }
 
     public String getClassificacao() {
         return classificacao;
-    }
-
-    public double getNota() {
-        return nota;
     }
 
     public String getImagem() {
@@ -81,6 +78,10 @@ public class Filme {
 
     public FilmeStatus getStatus() {
         return status;
+    }
+
+    public LocalDate getDataEstreia() {
+        return dataEstreia;
     }
 
     public List<FilmeGenero> getGeneros() {
@@ -100,16 +101,12 @@ public class Filme {
         this.sinopse = sinopse;
     }
 
-    public void setDuracao(int duracao) {
+    public void setDuracao(Integer duracao) {
         this.duracao = duracao;
     }
 
     public void setClassificacao(String classificacao) {
         this.classificacao = classificacao;
-    }
-
-    public void setNota(double nota) {
-        this.nota = nota;
     }
 
     public void setImagem(String imagem) {
@@ -124,6 +121,10 @@ public class Filme {
         this.status = status;
     }
 
+    public void setDataEstreia(LocalDate dataEstreia) {
+        this.dataEstreia = dataEstreia;
+    }
+
     public void setGeneros(List<FilmeGenero> generos) {
         this.generos = generos;
     }
@@ -133,17 +134,21 @@ public class Filme {
         int id               = (int) registro.get("id");
         String titulo        = (String) registro.get("titulo");
         String sinopse       = (String) registro.get("sinopse");
-        int duracao          = (int) registro.get("duracao");
+        Integer duracao      = (Integer) registro.get("duracao");
         String classificacao = (String) registro.get("classificacao");
-        double nota          = ((Number) registro.get("nota")).doubleValue();
         String imagem        = (String) registro.get("imagem");
         String banner        = (String) registro.get("banner");
         FilmeStatus status   = FilmeStatus.valueOf((String) registro.get("status_filme"));
-        return new Filme(id, titulo, sinopse, duracao, classificacao, nota, imagem, banner, status);
+        LocalDate dataEstreia = registro.get("data_estreia") != null ? 
+                                                 ((java.sql.Date) registro.get("data_estreia")).toLocalDate() : null;
+        return new Filme(id, titulo, sinopse, duracao, classificacao, imagem, banner, status, dataEstreia);
     }
 
     // Retorna a duração formatada: 130 -> "2h 10min"
     public String getDuracaoFormatada() {
+        if (duracao == null) 
+            return "Duração a definir";
+            
         int horas = duracao / 60;
         int minutos = duracao % 60;
         

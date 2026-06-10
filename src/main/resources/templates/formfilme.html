@@ -34,44 +34,16 @@
  
         <form action="#" th:action="@{/filme/cadastro}" method="post" th:object="${filme}" enctype="multipart/form-data" class="form-card">
  
+            <!-- ── CAMPOS SEMPRE VISÍVEIS ─────────────────────────── -->
+
             <div class="form-group">
                 <label>Título</label>
-                <input type="text" th:field="*{titulo}" placeholder="Ex: O Diabo Veste Prada 2">
+                <input type="text" th:field="*{titulo}" placeholder="Ex: O Diabo Veste Prada 2" required>
             </div>
  
             <div class="form-group">
                 <label>Sinopse</label>
-                <textarea th:field="*{sinopse}" placeholder="Descrição do filme..." rows="4"></textarea>
-            </div>
- 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Duração (min)</label>
-                    <input type="text" th:field="*{duracao}" placeholder="Ex: 90">
-                </div>
-            
-                <div class="form-group">
-                    <label>Classificação</label>
-                    <select th:field="*{classificacao}">
-                        <option value="L">Livre</option>
-                        <option value="10">10</option>
-                        <option value="12">12</option>
-                        <option value="14">14</option>
-                        <option value="16">16</option>
-                        <option value="18">18</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Nota</label>
-                    <input type="number" th:field="*{nota}" placeholder="Ex: 9.2" step="0.1" min="0" max="10">
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select th:field="*{status}">
-                        <option value="EM_CARTAZ">Em Cartaz</option>
-                        <option value="EM_BREVE">Em Breve</option>
-                    </select>
-                </div>
+                <textarea th:field="*{sinopse}" placeholder="Descrição do filme..." rows="4" required></textarea>
             </div>
 
             <!-- Gêneros via checkboxes gerados pelo Enum -->
@@ -84,8 +56,57 @@
                     </label>
                 </div>
             </div>
- 
+
+            <div class="form-group">
+                <label>Status</label>
+                 <select id="status" name="status" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="EM_CARTAZ">Em Cartaz</option>
+                    <option value="EM_BREVE">Em Breve</option>
+                </select>
+            </div>
+
             <div class="form-row">
+                <div class="form-group">
+                    <label>Classificação</label>
+                    <select id="classificacao" th:field="*{classificacao}" required>
+                        <option value="?" id="opt-indefinida" style="display:none;">Não definida (?)</option>
+                        <option value="L">Livre</option>
+                        <option value="10">10</option>
+                        <option value="12">12</option>
+                        <option value="14">14</option>
+                        <option value="16">16</option>
+                        <option value="18">18</option>
+                    </select>
+                </div>    
+            
+                <div class="form-group">
+                        <label>Duração (min) <span class="hint">(opcional)</span></label>
+                        <input type="number" th:field="*{duracao}" placeholder="Ex: 130">
+                </div>
+            </div>
+            
+            <!-- ── CAMPOS SÓ EM BREVE ─────────────────────────────── -->
+            <div id="grupo-em-breve" class="campos-dinamicos" style="display:none;">
+            
+                    <div class="form-group">
+                        <label>
+                        Data de Estreia
+                        <span class="hint">(opcional)</span>
+                        </label>
+                        <input type="date" th:field="*{dataEstreia}">
+                    </div>
+                
+            </div>
+
+            <!-- ── IMAGENS — sempre visíveis após status escolhido ── -->
+        <!--
+            Agrupadas junto, aparecem junto com o grupo do status.
+            O required é adicionado pelo JS em ambos os casos.
+        -->
+
+            <div id="grupo-imagens" class="campos-dinamicos" style="display:none;">
+                <div class="form-row">
                 <!--
                     Campo de upload do pôster.
                     - type="file" abre o seletor de arquivo do sistema operacional
@@ -93,27 +114,32 @@
                     - name="poster" deve ser IGUAL ao @RequestParam("poster") no Controller
                     - NÃO usa th:field aqui, porque MultipartFile não é um campo do objeto Filme
                 -->
-                <div class="form-group">
-                    <label>Pôster do Filme</label>
-                    <input type="file" name="poster" accept="image/*" required>
-                </div>
+                    <div class="form-group">
+                        <label>Pôster do Filme</label>
+                        <input type="file" name="poster" accept="image/*" required>
+                        <span class="file-hint">Imagem vertical (ex: 500×750px)</span>
+                    </div>
 
                  <!--
                     Campo de upload do banner.
                     - name="bannerFile" deve ser IGUAL ao @RequestParam("bannerFile") no Controller
                 -->
-                <div class="form-group">
-                    <label>Banner do Filme</label>
-                    <input type="file" name="bannerFile" accept="image/*" required>
+                    <div class="form-group">
+                        <label>Banner do Filme</label>
+                        <input type="file" name="bannerFile" accept="image/*" required>
+                        <span class="file-hint">Imagem horizontal (ex: 1280×720px)</span>
+                    </div>
                 </div>
-
             </div>
  
-            <button type="submit" class="submit-btn">CADASTRAR FILME</button>
+            <button type="submit" id="btn-submit" class="submit-btn" style="display:none;">
+            CADASTRAR FILME
+            </button>
  
         </form>
     </div>
 
+    <script th:src="@{/js/formfilme.js}"></script>
  
 </body>
 </html>

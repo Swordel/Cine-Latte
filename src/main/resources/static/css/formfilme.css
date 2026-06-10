@@ -42,12 +42,12 @@ body{
     gap: 8px;
     flex: 1;
 }
- 
+
 .form-row {
     display: flex;
     gap: 16px;
 }
- 
+
 label {
     font-size: 11px;
     letter-spacing: 1px;
@@ -135,4 +135,61 @@ textarea {
  
 .submit-btn:hover {
     background: #E8DCC6;
+}
+
+/* Agrupa os campos dinâmicos com gap igual ao restante do form */
+.campos-dinamicos {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Texto de dica embaixo do label (ex: "opcional") */
+.hint {
+    font-size: 10px;
+    letter-spacing: 0;
+    color: rgba(201, 178, 155, 0.5);
+    text-transform: none;
+    font-weight: 400;
+    margin-left: 6px;
+}
+
+/* Input file: ajusta aparência para combinar com os demais campos */
+input[type="file"] {
+    padding: 10px 14px;
+    cursor: pointer;
+    color: rgba(201, 178, 155, 0.6);
+}
+
+input[type="file"]::file-selector-button {
+    background: rgba(198, 156, 109, 0.15);
+    border: 1px solid rgba(198, 156, 109, 0.35);
+    border-radius: 6px;
+    color: #C69C6D;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    margin-right: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: rgba(198, 156, 109, 0.28);
+}
+
+/* Dica de dimensão embaixo do input file */
+.file-hint {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    color: rgba(201, 178, 155, 0.4);
+    margin-top: 2px;
+}
+
+/* Input date — o ícone de calendário nativo fica estranho no tema escuro */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
 }

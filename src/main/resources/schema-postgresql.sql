@@ -5,10 +5,10 @@ CREATE TABLE IF NOT EXISTS filme (
     sinopse       TEXT,
     duracao       INTEGER,
     classificacao VARCHAR(5),
-    nota          NUMERIC(3,1),
     imagem        VARCHAR(200),   -- nome do arquivo do pôster (gerado com UUID)
     banner        VARCHAR(200),   -- nome do arquivo do banner (gerado com UUID)
-    status_filme  VARCHAR(10)
+    status_filme  VARCHAR(10),
+    data_estreia  DATE
 );
 
 -- Tabela associativa filme x gênero
@@ -65,70 +65,70 @@ CREATE TABLE IF NOT EXISTS reserva_item (
 -- Os filmes pré-existentes usam imagens que já estão em static/images/
 
 -- Insere filmes apenas se a tabela estiver vazia
-INSERT INTO filme (titulo, sinopse, duracao, classificacao, nota, imagem, banner, status_filme)
+INSERT INTO filme (titulo, sinopse, duracao, classificacao, imagem, banner, status_filme, data_estreia)
 SELECT * FROM (VALUES
 
     ('BTS Arirang World Tour',
      'SINOPSE 1',
-     180, '14', 8.3, 'cartazBTS.webp', 'bannerBTS.webp', 'EM_CARTAZ'),
+     180, '14', 'cartazBTS.webp', 'bannerBTS.webp', 'EM_CARTAZ', NULL),
 
     ('O Diabo Veste Prada 2',
      'SINOPSE 2',
-     120, '12', 7.1, 'cartazPrada.png', 'bannerPrada.webp', 'EM_CARTAZ'),
+     120, '12', 'cartazPrada.png', 'bannerPrada.webp', 'EM_CARTAZ', NULL),
 
     ('Michael',
      'SINOPSE 3',
-     127, '12', 7.7, 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ'),
+     127, '12', 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ', NULL),
 
     ('Mestres do Universo',
      'SINOPSE 4',
-     123, '14', 9.4, 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ'),
+     123, '14', 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ', NULL),
  
     ('Super Mario Galaxy - O Filme',
      'SINOPSE 5',
-     99, 'L', 9.0, 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ'),
+     99, 'L', 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ', NULL),
  
     ('The Amazing Digital Circus: O Último Ato',
      'SINOPSE 6',
-     120, 'L', 8.6, 'cartazCircus.jpg', 'bannerCircus.png', 'EM_CARTAZ'),
+     120, 'L', 'cartazCircus.jpg', 'bannerCircus.png', 'EM_CARTAZ', NULL),
  
     ('O Mandaloriano E Grogu',
      'SINOPSE 7',
-     132, '14', 9.1, 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ'),
+     132, '14', 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ', NULL),
 
     ('Obsessão',
      'SINOPSE 8',
-     108, '18', 8.1, 'cartazObs.jpg', NULL, 'EM_CARTAZ'),
+     108, '18', 'cartazObs.jpg', NULL, 'EM_CARTAZ', NULL),
  
     ('Interstellar',
      'SINOPSE 9',
-     169, '10', 9.5, 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ'),
+     169, '10', 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ', NULL),
 
      ('Good Omens 3',
      'SINOPSE 10',
-     90, '16', 8.2, 'breveGoodOmens.jpg', NULL, 'EM_BREVE'),
+     90, '16', 'breveGoodOmens.jpg', NULL, 'EM_BREVE', DATE '2026-07-27'),
  
     ('Luigi`s Mansion - O Filme',
      'SINOPSE 11',
-     90, 'L', 9.7, 'breveLuigi.jpg', NULL, 'EM_BREVE'),
+     90, 'L', 'breveLuigi.jpg', NULL, 'EM_BREVE', DATE '2026-08-27'),
  
     ('Caramelo - Um Filme Netflix',
      'SINOPSE 12',
-     95, '12', 10.0, 'breveCaramelo.jpg', NULL, 'EM_BREVE'),
+     95, '12', 'breveCaramelo.jpg', NULL, 'EM_BREVE', DATE '2026-09-27'),
 
      ('Avengers Endgame - Reboot 2026',
      'SINOPSE 13',
-     181, '12', 10.0, 'breveAvengers.webp', NULL, 'EM_BREVE'),
+     181, '12', 'breveAvengers.webp', NULL, 'EM_BREVE', DATE '2026-10-27'),
 
      ('Demon Slayer - Castelo Infinito',
      'SINOPSE 14',
-     155, '18', 9.5, 'breveDemonSlayer.jpg', NULL, 'EM_BREVE'),
+     155, '18', 'breveDemonSlayer.jpg', NULL, 'EM_BREVE', DATE '2026-11-27'),
 
      ('Totoro',
      'SINOPSE 15',
-     86, 'L', 9.8, 'breveTotoro.jpg', NULL, 'EM_BREVE')
+     86, 'L', 'breveTotoro.jpg', NULL, 'EM_BREVE', DATE '2026-12-27')
 
-) AS novos(titulo, sinopse, duracao, classificacao, nota, imagem, banner, status_filme)
+) AS novos(titulo, sinopse, duracao, classificacao, imagem, banner, status_filme, data_estreia)
 WHERE NOT EXISTS (SELECT 1 FROM filme LIMIT 1);
 
 -- Insere gêneros dos filmes apenas se filme_genero estiver vazia
