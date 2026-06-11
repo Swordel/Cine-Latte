@@ -1,0 +1,234 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    padding-top: 90px;
+}
+
+/* ── LAYOUT PRINCIPAL ───────────────────────────────────────── */
+.lista-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+}
+
+/* Linha do título + botão novo */
+.lista-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.lista-titulo {
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #F5EBDD;
+}
+
+.btn-novo {
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 40px;
+    border: 1px solid #C69C6D;
+    color: #C69C6D;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-novo:hover {
+    background: #C69C6D;
+    color: #1E1612;
+}
+
+/* ── ABAS EM CARTAZ / EM BREVE ──────────────────────────────── */
+.lista-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1.5px solid rgba(198, 156, 109, 0.12);
+    margin-bottom: 32px;
+}
+
+.lista-tab {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 14px 20px;
+    color: #C9B29B;
+    text-decoration: none;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -1.5px;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+}
+
+.lista-tab.active {
+    color: #F5EBDD;
+    border-bottom-color: #7A8B74;
+    font-weight: 500;
+}
+
+.lista-tab:hover:not(.active) {
+    color: #F5EBDD;
+}
+
+/* ── GRADE DE FILMES ────────────────────────────────────────── */
+.filmes-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 20px 16px;
+}
+
+/* ── ITEM: card + botões ────────────────────────────────────── */
+.filme-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.movie-card-admin {
+    text-decoration: none;
+    color: #E8DCC6;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s;
+    cursor: default;
+}
+
+.movie-card-admin:hover {
+    transform: scale(1.03);
+}
+
+.movie-card-admin .movie-poster {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.movie-card-admin .movie-poster img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-card-admin .movie-info {
+    font-family: 'Lato', sans-serif;
+    padding: 8px 2px 4px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.movie-card-admin .movie-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #E8DCC6;
+    letter-spacing: 0.3px;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-card-admin .movie-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: #A6B59F;
+    flex-wrap: wrap;
+    margin-top: auto;
+}
+
+/* Badges de classificação — mesmos do index */
+.cls-badge {
+    background: #e8a020;
+    color: white;
+    font-weight: 700;
+    font-size: 9px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    line-height: 1.4;
+}
+
+.cls-livre  { background: #4caf50; }
+.cls-maior  { background: black; border: 1px solid white; }
+
+/* ── BOTÕES EDITAR / DELETAR ────────────────────────────────── */
+.filme-acoes {
+    display: flex;
+    gap: 6px;
+    margin-top: auto;
+}
+
+.btn-editar,
+.btn-deletar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 7px 0;
+    border-radius: 6px;
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    text-decoration: none;
+}
+
+.btn-editar {
+    border: 1px solid rgba(198, 156, 109, 0.35);
+    background: transparent;
+    color: #C69C6D;
+}
+
+.btn-editar:hover {
+    background: rgba(198, 156, 109, 0.15);
+    border-color: #C69C6D;
+}
+
+.btn-deletar {
+    border: 1px solid rgba(220, 80, 80, 0.35);
+    background: transparent;
+    color: #c05050;
+}
+
+.btn-deletar:hover {
+    background: rgba(220, 80, 80, 0.12);
+    border-color: #c05050;
+}
+
+/* Remove estilo padrão do form do deletar */
+.filme-acoes form {
+    flex: 1;
+    display: flex;
+}
+
+.filme-acoes form .btn-deletar {
+    width: 100%;
+}
+
+/* Mensagem de lista vazia */
+.sem-filmes {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #C9B29B;
+    text-align: center;
+    padding: 60px 0;
+    opacity: 0.6;
+}

@@ -32,4 +32,18 @@ public class FilmeService {
         return filmeDAO.obterFilmesPorStatus(status);
     }
 
+    public void atualizarFilme(int id, Filme filme, List<FilmeGenero> generos) {
+        filmeDAO.atualizarFilme(id, filme);
+        
+        // Apaga os gêneros antigos e reinsere os novos
+        filmeDAO.deletarGeneros(id);
+        for (FilmeGenero g : generos) {
+            filmeDAO.inserirFilmeGenero(id, g);
+        }
+    }
+
+    public void deletarFilme(int id) {
+        filmeDAO.deletarFilme(id);
+    }
+
 }

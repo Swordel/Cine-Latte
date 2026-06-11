@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Filmes — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/listaFilmes.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+
+    <div class="admin-wrapper" id="adminWrapper">
+        <img class="admin-avatar"
+             th:src="@{/images/adminphoto.png}"
+             alt="Admin"
+             id="adminAvatar">
+        <div class="admin-dropdown" id="adminDropdown">
+            <div class="admin-dropdown-header">
+                <img th:src="@{/images/adminphoto.png}" alt="Admin">
+                <span>Área do Administrador</span>
+            </div>
+            <div class="admin-dropdown-divider"></div>
+            <a class="admin-dropdown-item" th:href="@{/filme/cadastro}">Cadastrar Filme</a>
+            <a class="admin-dropdown-item" th:href="@{/admin/filmes}">Listar Filmes</a>
+            <a class="admin-dropdown-item" href="#">Cadastrar Sessão</a>
+            <a class="admin-dropdown-item" href="#">Listar Sessões</a>
+        </div>
+    </div>
+</header>
+
+<!-- ========== CONTEÚDO ========== -->
+<main class="lista-main">
+
+    <div class="lista-topo">
+        <h2 class="lista-titulo">Gerenciar Filmes</h2>
+        <a th:href="@{/filme/cadastro}" class="btn-novo">
+            + Novo Filme
+        </a>
+    </div>
+
+    <!-- Abas Em Cartaz / Em Breve -->
+    <div class="lista-tabs">
+        <!--
+            th:classappend adiciona a classe "active" sem remover as outras.
+            statusAtivo é uma String passada pelo controller: "EM_CARTAZ" ou "EM_BREVE".
+        -->
+        <a th:href="@{/admin/filmes(status='EM_CARTAZ')}"
+           class="lista-tab"
+           th:classappend="${statusAtivo == 'EM_CARTAZ'} ? ' active' : ''">
+            Em Cartaz
+        </a>
+        <a th:href="@{/admin/filmes(status='EM_BREVE')}"
+           class="lista-tab"
+           th:classappend="${statusAtivo == 'EM_BREVE'} ? ' active' : ''">
+            Em Breve
+        </a>
+    </div>
+
+    <!-- Grade de filmes -->
+    <div class="filmes-grid">
+
+        <!--
+            th:each itera sobre a lista "filmes" enviada pelo controller.
+            Cada item é um .filme-item com o card + os botões embaixo.
+        -->
+        <div class="filme-item" th:each="filme : ${filmes}">
+
+            <!-- Card visual igual ao do index -->
+            <div class="movie-card-admin">
+                <div class="movie-poster">
+                    <img th:src="@{/uploads/{img}(img=${filme.imagem})}"
+                         th:alt="${filme.titulo}">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-name" th:text="${filme.titulo}"></div>
+                    <div class="movie-meta">
+                        <span th:text="${filme.classificacao}"
+                              th:class="${filme.classificacao == 'L'} ? 'cls-badge cls-livre' :
+                                        (${filme.classificacao == '18'} ? 'cls-badge cls-maior' : 'cls-badge')">
+                        </span>
+                        <span th:text="${filme.duracaoFormatada}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botões Editar / Deletar -->
+            <div class="filme-acoes">
+
+                <!-- Editar: GET leva para o formupdate preenchido -->
+                <a th:href="@{/admin/filme/{id}/editar(id=${filme.id})}"
+                   class="btn-editar">
+                    <i class="fa-solid fa-pen"></i> Editar
+                </a>
+
+                <!-- Deletar: um <form> com method="post" -->
+                <form th:action="@{/admin/filme/{id}/deletar(id=${filme.id})}"
+                      method="post"
+                      onsubmit="return confirm('Tem certeza que deseja deletar este filme?')">
+                    <button type="submit" class="btn-deletar">
+                        <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Mensagem se não houver filmes -->
+    <p class="sem-filmes" th:if="${filmes.empty}">
+        Nenhum filme cadastrado nesta categoria.
+    </p>
+
+</main>
+
+<script th:src="@{/js/adminMenu.js}"></script>
+
+</body>
+</html>

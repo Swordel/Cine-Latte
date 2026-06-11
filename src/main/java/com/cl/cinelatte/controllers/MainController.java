@@ -169,8 +169,53 @@ public class MainController {
         return ResponseEntity.notFound().build();
     }
 
+    // ========= LISTAGEM DE FILMES PARA O ADMIN =========
 
+    // Lista filmes por status. Se não passar ?status=, assume EM_CARTAZ.
+    // URL: /admin/filmes  ou  /admin/filmes?status=EM_BREVE
+    @GetMapping("/admin/filmes")
+    public String listarFilmes(@RequestParam(defaultValue = "EM_CARTAZ") String status, Model model) {
+        FilmeService fs = context.getBean(FilmeService.class);
+        FilmeStatus filmeStatus = FilmeStatus.valueOf(status);
+        model.addAttribute("filmes", fs.obterFilmesPorStatus(filmeStatus));
+        model.addAttribute("statusAtivo", status); // usado pelas abas no HTML
+        return "listaFilmes";
+    }
 
+    // ========= Edição de Filmes / UPDATE =========
+
+    // Formulário de edição: carrega os dados atuais do filme
+    // URL: /admin/filme/3/editar
+    @GetMapping("/admin/filme/{id}/editar")
+    public String formEditarFilme(@PathVariable int id, Model model) {
+        FilmeService fs = context.getBean(FilmeService.class);
+        Filme filmeAntigo = fs.obterFilme(id);
+        model.addAttribute("filme", filmeAntigo);
+        model.addAttribute("generos", FilmeGenero.values());
+        return "formeditarfilme"; 
+    }
+
+    // Recebe o submit do formulário de edição
+    // URL: POST /admin/filme/3/editar
+    @PostMapping("/admin/filme/{id}/editar")
+    public String editarFilme(@PathVariable int id,
+                               @ModelAttribute Filme filme,
+                               @RequestParam List<FilmeGenero> generos) {
+        FilmeService fs = context.getBean(FilmeService.class);
+        fs.atualizarFilme(id, filme, generos);
+        return "redirect:/admin/filmes";
+    }
+
+    // ========= Deletar filme :c =========
+
+    // Deleta o filme e redireciona de volta para a lista
+    // URL: POST /admin/filme/3/deletar
+    @PostMapping("/admin/filme/{id}/deletar")
+    public String deletarFilme(@PathVariable int id) {
+        FilmeService fs = context.getBean(FilmeService.class);
+        fs.deletarFilme(id);
+        return "redirect:/admin/filmes";
+    }
 
 
     // ========= PÁGINA DAS SESSÕES =========

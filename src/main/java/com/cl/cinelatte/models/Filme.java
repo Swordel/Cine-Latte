@@ -158,4 +158,12 @@ public class Filme {
         return horas + "h " + minutos + "min";
     }
 
+    //Para poder exibir lá no formulário de edição
+    public String getDataEstreiaFormatada() {
+        if (dataEstreia == null)
+            return "";
+        
+        return dataEstreia.toString(); // LocalDate.toString() já retorna "yyyy-MM-dd"
+    }
+
 }

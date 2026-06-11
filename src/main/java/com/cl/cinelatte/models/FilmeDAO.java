@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.PostConstruct;
 
@@ -84,6 +85,59 @@ public class FilmeDAO {
         return aux;
     }
 
+    // UPDATE: atualiza todos os campos de texto do filme (sem imagem)
+    public void atualizarFilme(int id, Filme novo) {
+        String sql = "UPDATE filme SET titulo = ?, sinopse = ?, duracao = ?, classificacao = ?, status_filme = ?, data_estreia = ? WHERE id = ?";
+        Object[] obj = new Object[7];
+        obj[0] = novo.getTitulo();
+        obj[1] = novo.getSinopse();
+        obj[2] = novo.getDuracao();
+        obj[3] = novo.getClassificacao();
+        obj[4] = novo.getStatus().name();
+        obj[5] = novo.getDataEstreia() != null ? java.sql.Date.valueOf(novo.getDataEstreia()) : null;
+        obj[6] = id;
+        jdbc.update(sql, obj);
+    }
+     
+    // Necessário para o atualizarFilme no Service poder recriar os gêneros
+    // Apago só os gêneros e não o filme inteiro
+    public void deletarGeneros(int idFilme) {
+        jdbc.update("DELETE FROM filme_genero WHERE id_filme = ?", idFilme);
+    }
 
+
+
+    // DELETE: ordem importa por causa da FK >:D
+    //Essa anotação abaixo -> se qualquer etapa falhar, tudo é desfeito:
+    @Transactional
+    public void deletarFilme(int id) {
+
+    // 1.  Seleciona todos os IDs de reservas feitas para o filme definido
+    // e apago da tabela de itens todos os registros que pertencem às reservas encontradas
+    // As três aspas (""") são usadas para criar uma String de Múltiplas Linhas e facilitar a escrita do SQL
+    jdbc.update("""
+        DELETE FROM reserva_item
+        WHERE reserva_id IN (
+            SELECT r.id FROM reserva r
+            JOIN sessao s ON r.sessao_id = s.id
+            WHERE s.filme_id = ?
+        )""", id);
+
+    // 2. reservas com sessões desse filme
+    jdbc.update("""
+        DELETE FROM reserva
+        WHERE sessao_id IN (
+            SELECT id FROM sessao WHERE filme_id = ?
+        )""", id);
+
+    // 3. sessões do filme
+    jdbc.update("DELETE FROM sessao WHERE filme_id = ?", id);
+
+    // 4. gêneros do filme
+    jdbc.update("DELETE FROM filme_genero WHERE id_filme = ?", id);
+
+    // 5. o filme
+    jdbc.update("DELETE FROM filme WHERE id = ?", id);
+    }
 
 }

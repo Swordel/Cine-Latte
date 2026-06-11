@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Filme — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/formfilme.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <button class="login-btn" onclick="history.back()">VOLTAR</button>
+</header>
+
+<!-- ========== FORMULÁRIO ========== -->
+<div class="form-wrapper">
+    <h2 class="form-title">Editar Filme</h2>
+
+    <!--
+        th:action usa o id do filme para montar a URL: /admin/filme/3/editar
+        Não precisa de enctype multipart porque não há upload de imagem aqui.
+    -->
+    <form th:action="@{/admin/filme/{id}/editar(id=${filme.id})}"
+          method="post"
+          th:object="${filme}"
+          class="form-card">
+
+        <div class="form-group">
+            <label>Título</label>
+            <!-- th:field preenche o valor atual automaticamente -->
+            <input type="text" th:field="*{titulo}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Sinopse</label>
+            <textarea th:field="*{sinopse}" rows="4" required></textarea>
+        </div>
+
+        <!--
+            Gêneros: th:checked compara cada opção do Enum com a lista
+            de gêneros que já estão salvos no filme.
+            filme.generos precisa estar preenchido -> o controller
+            deve chamar fs.obterFilme(id) que já carrega os gêneros.
+        -->
+        <div class="form-group">
+            <label>Gêneros</label>
+            <div class="checkboxes">
+                <label th:each="genero : ${generos}" class="checkbox-item">
+                    <input type="checkbox"
+                           name="generos"
+                           th:value="${genero.name()}"
+                           th:checked="${filme.generos != null and filme.generos.contains(genero)}">
+                    <span th:text="${genero.descricao}"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-row">
+
+            <!--
+                Status: aqui sim usamos th:field (diferente do cadastro).
+                No cadastro o campo começava vazio de propósito.
+                Aqui queremos mostrar o valor atual do filme, então
+                th:field seleciona a option correta automaticamente.
+            -->
+            <div class="form-group">
+                <label>Status</label>
+                <select th:field="*{status}" required>
+                    <option value="EM_CARTAZ">Em Cartaz</option>
+                    <option value="EM_BREVE">Em Breve</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Classificação</label>
+                <select th:field="*{classificacao}" required>
+                    <option value="?">Não definida (?)</option>
+                    <option value="L">Livre</option>
+                    <option value="10">10</option>
+                    <option value="12">12</option>
+                    <option value="14">14</option>
+                    <option value="16">16</option>
+                    <option value="18">18</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Duração (min) <span class="hint">(opcional)</span></label>
+                <input type="number" th:field="*{duracao}">
+            </div>
+
+        </div>
+
+        <!-- Data de estreia: visível sempre, relevante só para Em Breve -->
+        <div class="form-group">
+            <label>Data de Estreia <span class="hint">(opcional)</span></label>
+           <input type="date" name="dataEstreia" th:value="${filme.dataEstreiaFormatada}">
+        </div>
+
+            <span class="hint" style="margin-left:0; font-size:11px;">
+                Para editar o pôster ou banner, delete o filme e cadastre novamente! ¯\_(ツ)_/¯
+            </span>
+        
+
+        <button type="submit" class="submit-btn">SALVAR ALTERAÇÕES</button>
+
+    </form>
+</div>
+
+</body>
+</html>
