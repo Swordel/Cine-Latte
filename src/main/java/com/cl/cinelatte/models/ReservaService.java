@@ -14,7 +14,6 @@ public class ReservaService {
     @Autowired
     ReservaDAO reservaDAO;
 
-        //AINDA vou repassar isso!!
      // Calcula o valor total: usado pelo controller na página de pagamento (GET)
     public double calcularTotal(int qtdInteira, int qtdMeia) {
         return (qtdInteira * TipoIngresso.INTEIRA.getPreco())

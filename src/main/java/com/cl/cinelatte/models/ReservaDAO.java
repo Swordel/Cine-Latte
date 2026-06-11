@@ -25,8 +25,9 @@ public class ReservaDAO {
         jdbc = new JdbcTemplate(dataSource);
     }
 
-    // INSERT da reserva — dt_compra é preenchida pelo banco com NOW()
-    //  retorna a data e hora atual do servidor no momento da execução da query
+    // INSERT da reserva: dt_compra é preenchida pelo banco com NOW()
+    // O NOW() retorna a data e hora atual do servidor no momento da execução da query
+    // INSERT da reserva retorna o id gerado :9
     public int inserirReserva(Reserva reserva) {
         String sql = "INSERT INTO reserva(sessao_id, dt_compra, valor_total, forma_pagamento, pago) VALUES (?, NOW(), ?, ?, ?)";
         Object[] obj = new Object[4];

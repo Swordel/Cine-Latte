@@ -1,6 +1,202 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <body>
-        <h1>PAGAMENTOS!!</h1>
-    </body>
-    </html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/pagamento.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <button class="login-btn" onclick="history.back()">VOLTAR</button>
+</header>
+
+<main>
+
+    <!-- Linha do tempo -->
+    <div class="timeline">
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-couch"></i></div>
+            <span>Assentos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-ticket-simple"></i></div>
+            <span>Ingressos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step active">
+            <div class="step-icon active-icon"><i class="fa-solid fa-credit-card"></i></div>
+            <span>Pagamento</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step">
+            <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <span>Confirmação</span>
+        </div>
+    </div>
+
+    <div class="page-layout">
+
+        <!-- ── COLUNA ESQUERDA: formulário de pagamento ── -->
+        <div class="coluna-pagamento">
+            <h2 class="section-title">Escolha a forma de pagamento</h2>
+
+                <!-- formaPagamento será preenchido pelo JS ao selecionar -->
+                <input type="hidden" name="formaPagamento" id="inputFormaPagamento" value="CARTAO">
+
+                <!-- Seletor de forma de pagamento -->
+                <div class="forma-tabs">
+                    <button type="button" class="forma-tab active" id="tabCartao"
+                            onclick="selecionarForma('CARTAO')">
+                        Cartão de crédito
+                    </button>
+                    <button type="button" class="forma-tab" id="tabPix"
+                            onclick="selecionarForma('PIX')">
+                        PIX
+                    </button>
+                </div>
+
+                <!-- Painel Cartão -->
+                <div class="painel-pagamento" id="painelCartao">
+                    <div class="form-group">
+                        <label>Número do cartão</label>
+                        <input type="text" id="numCartao" maxlength="19"
+                               placeholder="0000 0000 0000 0000"
+                               oninput="formatarCartao(this)">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nome no cartão</label>
+                            <input type="text" placeholder="NOME SOBRENOME">
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label>Validade</label>
+                            <input type="text" placeholder="MM/AA" maxlength="5"
+                                   oninput="formatarValidade(this)">
+                        </div>
+                        <div class="form-group form-group-sm">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123" maxlength="3">
+                        </div>
+                    </div>
+                    <p class="pagamento-obs">
+                        ✓ Pagamento fake — qualquer dado será aprovado.
+                    </p>
+                </div>
+
+                <!-- Painel PIX -->
+                <div class="painel-pagamento hidden" id="painelPix">
+                    <div class="pix-area">
+                        <div class="pix-qr">
+                            <div class="pix-qr-placeholder">QR CODE</div>
+                        </div>
+                        <div class="pix-info">
+                            <p class="pix-instrucao">
+                                Abra o app do seu banco, escaneie o QR Code ou copie a chave PIX abaixo.
+                            </p>
+                            <div class="pix-chave">
+                                <span>contato@cinelatte.com.br</span>
+                                <button type="button" class="btn-copiar"
+                                        onclick="this.textContent='Copiado!'">Copiar</button>
+                            </div>
+                            <p class="pagamento-obs">
+                                ✓ Pagamento fake — clique em confirmar para concluir.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-confirmar">
+                    Confirmar pagamento
+                </button>
+
+         
+        </div>
+
+        <!-- ── COLUNA DIREITA: resumo ── -->
+        <div class="coluna-resumo">
+            <h3 class="resumo-titulo">Resumo do pedido</h3>
+
+            <div class="resumo-filme">
+                <img class="resumo-poster"
+                     th:src="@{/images/{img}(img=${filme.imagem})}"
+                     th:alt="${filme.titulo}">
+                <div class="resumo-filme-info">
+                    <div class="resumo-filme-titulo" th:text="${filme.titulo}"></div>
+                    <div class="resumo-tags">
+                        <span th:text="${filme.classificacao}"
+                              th:class="${filme.classificacao == 'L'} ? 'tag tag-livre' :
+                                        (${filme.classificacao == '18'} ? 'tag tag-maior' : 'tag tag-cls')">
+                        </span>
+                        <span class="tag" th:text="${sessao.idioma.name()}"></span>
+                    </div>
+                    <div class="resumo-sessao">
+                        Sala <span th:text="${sessao.salaId}"></span>
+                        · <span th:text="${sessao.dataFormatada}"></span>
+                        · <span th:text="${sessao.horarioFormatado}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <div class="resumo-row">
+                <span class="resumo-label">Assentos</span>
+                <span class="resumo-valor">
+                        <span th:each="assento, i : ${assentos}">
+                            <span th:if="${!i.first}">, </span>
+                                <span th:text="${assento.codigo}"></span>
+                        </span>
+                </span>
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <div class="resumo-row" th:if="${qtdInteira > 0}">
+                <span class="resumo-label" th:text="${qtdInteira} + 'x Inteira'"></span>
+                <span class="resumo-valor"
+                      th:text="'R$ ' + ${#numbers.formatDecimal(qtdInteira * 30.0, 1, 'POINT', 2, 'COMMA')}">
+                </span>
+            </div>
+            <div class="resumo-row" th:if="${qtdMeia > 0}">
+                <span class="resumo-label" th:text="${qtdMeia} + 'x Meia-entrada'"></span>
+                <span class="resumo-valor"
+                      th:text="'R$ ' + ${#numbers.formatDecimal(qtdMeia * 15.0, 1, 'POINT', 2, 'COMMA')}">
+                </span>
+            </div>
+
+            <div class="resumo-divider"></div>
+
+            <div class="resumo-row resumo-total">
+                <span class="resumo-label">Total</span>
+                <span class="resumo-valor"
+                      th:text="'R$ ' + ${#numbers.formatDecimal(valorTotal, 1, 'POINT', 2, 'COMMA')}">
+                </span>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script th:src="@{/js/pagamento.js}"></script>
+
+</body>
+</html>

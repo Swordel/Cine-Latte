@@ -46,10 +46,12 @@ CREATE TABLE IF NOT EXISTS sessao (
 
 -- Reserva = uma compra (agrupa vários assentos)
 CREATE TABLE IF NOT EXISTS reserva (
-    id          SERIAL PRIMARY KEY,
-    sessao_id   INTEGER REFERENCES sessao(id),
-    dt_compra   TIMESTAMP DEFAULT NOW(),
-    valor_total NUMERIC(8,2)
+    id SERIAL PRIMARY KEY,
+    sessao_id INTEGER REFERENCES sessao(id),
+    dt_compra TIMESTAMP DEFAULT NOW(),
+    valor_total NUMERIC(8,2),
+    forma_pagamento VARCHAR(10),
+    pago BOOLEAN
 );
 
 -- ReservaItem = cada assento dentro de uma compra

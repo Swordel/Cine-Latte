@@ -364,10 +364,27 @@ public class MainController {
             return "redirect:/sessao/" + id + "/ingressos";
         }
 
+        SessaoService ss = context.getBean(SessaoService.class);
+        FilmeService fs = context.getBean(FilmeService.class);
+        AssentoService as = context.getBean(AssentoService.class);
+        ReservaService rs = context.getBean(ReservaService.class);
+
+        Sessao sessao = ss.obterSessao(id);
+        Filme filme = fs.obterFilme(sessao.getFilmeId());
+        List<Assento> assentosSelecionados = as.obterAssentosSelecionados(assentoIds);
+
+        double valorTotal = rs.calcularTotal(qtdInteira, qtdMeia);
+
+        model.addAttribute("sessao", sessao);
+        model.addAttribute("filme", filme);
+        model.addAttribute("assentos", assentosSelecionados);
         model.addAttribute("qtdInteira", qtdInteira);
         model.addAttribute("qtdMeia", qtdMeia);
+        model.addAttribute("valorTotal", valorTotal);
 
         return "pagamento";
     }
+
+    
     
 }
