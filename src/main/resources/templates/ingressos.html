@@ -24,7 +24,7 @@
             <p>Bom filme. Bom café. Boa companhia.</p>
         </div>
     </div>
-    <button class="login-btn" onclick="history.back()">VOLTAR</button>
+    <a th:href="@{/sessao/{id}/assentos(id=${sessao.id})}" class="login-btn">VOLTAR</a>
 </header>
 
 <main>

@@ -1,0 +1,129 @@
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    padding-top: 90px;
+    padding-bottom: 40px;
+}
+
+main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 28px 24px;
+}
+
+/* ── LINHA DO TEMPO ─────────────────────────────────────────── */
+.timeline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.3;
+}
+
+.timeline-step.active { opacity: 1; }
+.timeline-step.done   { opacity: 0.7; }
+
+.step-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(198,156,109,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #C9B29B;
+    background: rgba(30,22,18,0.8);
+}
+
+.active-icon { border-color: #7A8B74; color: #7A8B74; background: rgba(122,139,116,0.15); }
+.done-icon   { border-color: #7A8B74; color: #7A8B74; background: rgba(122,139,116,0.12); }
+
+.timeline-step span {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+    color: #C9B29B;
+    white-space: nowrap;
+}
+
+.timeline-step.active span { color: #F5EBDD; }
+
+.timeline-line {
+    width: 48px;
+    height: 1px;
+    background: rgba(198,156,109,0.2);
+    margin-bottom: 16px;
+    flex-shrink: 0;
+}
+
+/* ── CONTEÚDO ───────────────────────────────────────────────── */
+.confirmacao-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.check-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid #7A8B74;
+    background: rgba(122,139,116,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: #7A8B74;
+}
+
+.confirmacao-titulo {
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    color: #F5EBDD;
+}
+
+.confirmacao-sub {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #C9B29B;
+    line-height: 1.7;
+    max-width: 400px;
+}
+
+/* Botão */
+.btn-inicio {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 14px 40px;
+    background: #C69C6D;
+    color: #1E1612;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.btn-inicio:hover { background: #E8DCC6; }

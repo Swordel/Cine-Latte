@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmação — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/confirmacao.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    
+</header>
+
+<main>
+
+    <!-- Linha do tempo -->
+    <div class="timeline">
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-couch"></i></div>
+            <span>Assentos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-ticket-simple"></i></div>
+            <span>Ingressos</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step done">
+            <div class="step-icon done-icon"><i class="fa-solid fa-credit-card"></i></div>
+            <span>Pagamento</span>
+        </div>
+        <div class="timeline-line"></div>
+        <div class="timeline-step active">
+            <div class="step-icon done-icon"><i class="fa-solid fa-circle-check"></i></div>
+            <span>Confirmação</span>
+        </div>
+    </div>
+
+    <!-- Ícone de sucesso -->
+    <div class="confirmacao-wrapper">
+        <div class="check-circle"><i class="fa-solid fa-circle-check"></i></div>
+        <h2 class="confirmacao-titulo">Compra confirmada!</h2>
+        <p class="confirmacao-sub">
+            Seu ingresso foi reservado com sucesso.<br>Apresente o número do pedido na bilheteria.
+        </p>
+
+        <a th:href="@{/}" class="btn-inicio">Voltar ao início</a>
+
+    </div>
+
+</main>
+
+</body>
+</html>

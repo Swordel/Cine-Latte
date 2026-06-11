@@ -58,6 +58,7 @@
         <!-- ── COLUNA ESQUERDA: formulário de pagamento ── -->
         <div class="coluna-pagamento">
             <h2 class="section-title">Escolha a forma de pagamento</h2>
+            <form th:action="@{/sessao/{id}/pagamento(id=${sessao.id})}" method="post">
 
                 <!-- formaPagamento será preenchido pelo JS ao selecionar -->
                 <input type="hidden" name="formaPagamento" id="inputFormaPagamento" value="CARTAO">
@@ -124,10 +125,8 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-confirmar">
-                    Confirmar pagamento
-                </button>
-
+                <button type="submit" class="btn-confirmar">Confirmar pagamento</button>
+            </form>
          
         </div>
 

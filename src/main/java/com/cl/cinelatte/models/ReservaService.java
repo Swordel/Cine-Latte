@@ -23,7 +23,7 @@ public class ReservaService {
     // Valida, calcula e insere a reserva completa -> retorna a Reserva criada
     public Reserva inserirReservaCompleta(int sessaoId, List<Integer> assentoIds, int qtdInteira, int qtdMeia, FormaPagamento formaPagamento) {
 
-         // == VALIDAÇÕES == :D
+        // == VALIDAÇÕES == :D
 
         // 1. Soma dos tipos deve bater com a quantidade de assentos
         if (qtdInteira + qtdMeia != assentoIds.size()) {
@@ -70,8 +70,7 @@ public class ReservaService {
             reservaDAO.inserirReservaItem(item);
         }
  
-        return reserva;
-
+        return reserva; //por hora não estou usando esse retorno, mas vou deixar salvo para caso eu precise!
     }
 
     public List<Integer> obterAssentosOcupadosPorSessao(int sessaoId) {

@@ -33,6 +33,7 @@ import com.cl.cinelatte.models.Filme;
 import com.cl.cinelatte.models.FilmeGenero;
 import com.cl.cinelatte.models.FilmeService;
 import com.cl.cinelatte.models.FilmeStatus;
+import com.cl.cinelatte.models.FormaPagamento;
 import com.cl.cinelatte.models.ReservaService;
 import com.cl.cinelatte.models.Sessao;
 import com.cl.cinelatte.models.SessaoIdioma;
@@ -87,7 +88,7 @@ public class MainController {
         FilmeService fs = context.getBean(FilmeService.class);
         fs.inserirFilme(filme, generos);
  
-        return "sucesso";
+        return "redirect:/admin/filmes";
     }
 
     /*
@@ -349,7 +350,7 @@ public class MainController {
     @GetMapping("/sessao/{id}/ingressos")
     public String ingressos(@PathVariable int id, HttpSession session, Model model) {
         // Recupera assentos salvos na sessão HTTP
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings("unchecked") //esse object é realmente um List<Integer> ? -> confia!
         List<Integer> assentoIds = (List<Integer>) session.getAttribute("assentoIds");
         Integer sessaoIdSession = (Integer) session.getAttribute("sessaoId");
 
@@ -397,6 +398,7 @@ public class MainController {
         Integer qtdInteira = (Integer) session.getAttribute("qtdInteira");
         Integer qtdMeia = (Integer) session.getAttribute("qtdMeia");
 
+        //detectar que alguém tentou acessar uma sessão diferente da compra em andamento
         if (sessaoIdSession == null || !sessaoIdSession.equals(id)) {
             return "redirect:/sessao/" + id + "/assentos";
         }
@@ -430,6 +432,45 @@ public class MainController {
         return "pagamento";
     }
 
-    
-    
+    @PostMapping("/sessao/{id}/pagamento")
+    public String confirmarPagamento(@PathVariable int id,
+                                  @RequestParam FormaPagamento formaPagamento,
+                                  HttpSession session,
+                                  Model model) {
+
+        @SuppressWarnings("unchecked")
+        List<Integer> assentoIds = (List<Integer>) session.getAttribute("assentoIds");
+        Integer qtdInteira = (Integer) session.getAttribute("qtdInteira");
+        Integer qtdMeia = (Integer) session.getAttribute("qtdMeia");
+        Integer sessaoIdSession = (Integer) session.getAttribute("sessaoId");
+
+        //valida primeiro se essa compra realmente pertence à sessão da URL antes de continuar
+        // alguém pode deixar a aba aberta, abrir outra sessão em outra página e depois tentar enviar na primeira aba
+        if (sessaoIdSession == null || !sessaoIdSession.equals(id)) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+
+        if (assentoIds == null || qtdInteira == null || qtdMeia == null) {
+            return "redirect:/sessao/" + id + "/assentos";
+        }
+
+        ReservaService rs = context.getBean(ReservaService.class);
+
+        // Delega tudo ao Service: controller só passa os dados
+        rs.inserirReservaCompleta(id, assentoIds, qtdInteira, qtdMeia, formaPagamento);
+
+        // Limpa a sessão após a compra
+        session.removeAttribute("assentoIds");
+        session.removeAttribute("sessaoId");
+        session.removeAttribute("qtdInteira");
+        session.removeAttribute("qtdMeia");
+
+        return "redirect:/sessao/" + id + "/confirmacao";
+    }
+
+    @GetMapping("/sessao/{id}/confirmacao")
+    public String confirmacao() {
+        return "confirmacao";
+    }   
+
 }
