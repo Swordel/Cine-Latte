@@ -334,3 +334,13 @@ footer {
 .admin-dropdown-item:last-child {
     border-radius: 0 0 10px 10px;
 }
+
+.alerta-erro {
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-weight: bold; 
+}

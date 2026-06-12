@@ -1,7 +1,7 @@
 -- Tabela de filmes
 CREATE TABLE IF NOT EXISTS filme (
     id            SERIAL PRIMARY KEY,
-    titulo        VARCHAR(100),
+    titulo        VARCHAR(100) UNIQUE,
     sinopse       TEXT,
     duracao       INTEGER,
     classificacao VARCHAR(5),
@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS sessao (
     sala_id   INTEGER REFERENCES sala(id),
     dt_sessao DATE,
     horario   TIME,
-    idioma    VARCHAR(10)
+    idioma    VARCHAR(10),
+    CONSTRAINT unique_sala_tempo UNIQUE (sala_id, dt_sessao, horario)
 );
 
 -- Reserva = uma compra (agrupa vários assentos)
@@ -66,93 +67,49 @@ CREATE TABLE IF NOT EXISTS reserva_item (
 -- == DADOS INICIAIS ==
 -- Os filmes pré-existentes usam imagens que já estão em static/images/
 
--- Insere filmes apenas se a tabela estiver vazia
+-- Insere os filmes UM POR UM. Se o título já existir, ele pula o filme e vai para o próximo.
 INSERT INTO filme (titulo, sinopse, duracao, classificacao, imagem, banner, status_filme, data_estreia)
-SELECT * FROM (VALUES
+VALUES
+    ('BTS Arirang World Tour', 'SINOPSE 1', 180, '14', 'cartazBTS.webp', 'bannerBTS.webp', 'EM_CARTAZ', NULL),
+    ('O Diabo Veste Prada 2', 'SINOPSE 2', 120, '12', 'cartazPrada.png', 'bannerPrada.webp', 'EM_CARTAZ', NULL),
+    ('Michael', 'SINOPSE 3', 127, '12', 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ', NULL),
+    ('Mestres do Universo', 'SINOPSE 4', 123, '14', 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ', NULL),
+    ('Super Mario Galaxy - O Filme', 'SINOPSE 5', 99, 'L', 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ', NULL),
+    ('The Amazing Digital Circus: O Último Ato', 'SINOPSE 6', 120, 'L', 'cartazCircus.jpg', 'bannerCircus.png', 'EM_CARTAZ', NULL),
+    ('O Mandaloriano E Grogu', 'SINOPSE 7', 132, '14', 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ', NULL),
+    ('Obsessão', 'SINOPSE 8', 108, '18', 'cartazObs.jpg', NULL, 'EM_CARTAZ', NULL),
+    ('Interstellar', 'SINOPSE 9', 169, '10', 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ', NULL),
+    ('Good Omens 3', 'SINOPSE 10', 90, '16', 'breveGoodOmens.jpg', NULL, 'EM_BREVE', DATE '2026-07-27'),
+    ('Luigi`s Mansion - O Filme', 'SINOPSE 11', 90, 'L', 'breveLuigi.jpg', NULL, 'EM_BREVE', DATE '2026-08-27'),
+    ('Caramelo - Um Filme Netflix', 'SINOPSE 12', 95, '12', 'breveCaramelo.jpg', NULL, 'EM_BREVE', DATE '2026-09-27'),
+    ('Avengers Endgame - Reboot 2026', 'SINOPSE 13', 181, '12', 'breveAvengers.webp', NULL, 'EM_BREVE', DATE '2026-10-27'),
+    ('Demon Slayer - Castelo Infinito', 'SINOPSE 14', 155, '18', 'breveDemonSlayer.jpg', NULL, 'EM_BREVE', DATE '2026-11-27'),
+    ('Totoro', 'SINOPSE 15', 86, 'L', 'breveTotoro.jpg', NULL, 'EM_BREVE', DATE '2026-12-27')
+ON CONFLICT (titulo) DO NOTHING;
 
-    ('BTS Arirang World Tour',
-     'SINOPSE 1',
-     180, '14', 'cartazBTS.webp', 'bannerBTS.webp', 'EM_CARTAZ', NULL),
-
-    ('O Diabo Veste Prada 2',
-     'SINOPSE 2',
-     120, '12', 'cartazPrada.png', 'bannerPrada.webp', 'EM_CARTAZ', NULL),
-
-    ('Michael',
-     'SINOPSE 3',
-     127, '12', 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ', NULL),
-
-    ('Mestres do Universo',
-     'SINOPSE 4',
-     123, '14', 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ', NULL),
- 
-    ('Super Mario Galaxy - O Filme',
-     'SINOPSE 5',
-     99, 'L', 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ', NULL),
- 
-    ('The Amazing Digital Circus: O Último Ato',
-     'SINOPSE 6',
-     120, 'L', 'cartazCircus.jpg', 'bannerCircus.png', 'EM_CARTAZ', NULL),
- 
-    ('O Mandaloriano E Grogu',
-     'SINOPSE 7',
-     132, '14', 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ', NULL),
-
-    ('Obsessão',
-     'SINOPSE 8',
-     108, '18', 'cartazObs.jpg', NULL, 'EM_CARTAZ', NULL),
- 
-    ('Interstellar',
-     'SINOPSE 9',
-     169, '10', 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ', NULL),
-
-     ('Good Omens 3',
-     'SINOPSE 10',
-     90, '16', 'breveGoodOmens.jpg', NULL, 'EM_BREVE', DATE '2026-07-27'),
- 
-    ('Luigi`s Mansion - O Filme',
-     'SINOPSE 11',
-     90, 'L', 'breveLuigi.jpg', NULL, 'EM_BREVE', DATE '2026-08-27'),
- 
-    ('Caramelo - Um Filme Netflix',
-     'SINOPSE 12',
-     95, '12', 'breveCaramelo.jpg', NULL, 'EM_BREVE', DATE '2026-09-27'),
-
-     ('Avengers Endgame - Reboot 2026',
-     'SINOPSE 13',
-     181, '12', 'breveAvengers.webp', NULL, 'EM_BREVE', DATE '2026-10-27'),
-
-     ('Demon Slayer - Castelo Infinito',
-     'SINOPSE 14',
-     155, '18', 'breveDemonSlayer.jpg', NULL, 'EM_BREVE', DATE '2026-11-27'),
-
-     ('Totoro',
-     'SINOPSE 15',
-     86, 'L', 'breveTotoro.jpg', NULL, 'EM_BREVE', DATE '2026-12-27')
-
-) AS novos(titulo, sinopse, duracao, classificacao, imagem, banner, status_filme, data_estreia)
-WHERE NOT EXISTS (SELECT 1 FROM filme LIMIT 1);
-
--- Insere gêneros dos filmes apenas se filme_genero estiver vazia
+-- Gêneros dos filmes 
+-- ON CONFLICT aqui também para evitar duplicar os gêneros dos filmes que já existiam
 INSERT INTO filme_genero (id_filme, genero)
-SELECT * FROM (VALUES
-    (1, 'MUSICAL'), 
-    (2, 'DRAMA'), (2, 'COMEDIA'),
-    (3, 'DRAMA'), (3, 'MUSICAL'),
-    (4, 'ACAO'), (4, 'FANTASIA'),
-    (5, 'ANIMACAO'), (5, 'AVENTURA'),
-    (6, 'ANIMACAO'), (6, 'FICCAO_CIENTIFICA'),
-    (7, 'ACAO'), (7, 'FICCAO_CIENTIFICA'),
-    (8, 'TERROR'),
-    (9, 'DRAMA'), (9, 'FICCAO_CIENTIFICA'),
-    (10, 'DRAMA'),
-    (11, 'ANIMACAO'), (11, 'AVENTURA'),
-    (12, 'COMEDIA'), (12, 'DRAMA'),
-    (13, 'ACAO'), (13, 'FICCAO_CIENTIFICA'),
-    (14, 'ACAO'), (14, 'ANIMACAO'),
-    (15, 'FANTASIA'), (15, 'AVENTURA'), (15, 'ANIMACAO')
-) AS fg(id_filme, genero)
-WHERE NOT EXISTS (SELECT 1 FROM filme_genero LIMIT 1);
+SELECT f.id, fg.genero
+FROM (VALUES
+    ('BTS Arirang World Tour',                    'MUSICAL'), 
+    ('O Diabo Veste Prada 2',                     'DRAMA'), ('O Diabo Veste Prada 2', 'COMEDIA'),
+    ('Michael',                                   'DRAMA'), ('Michael', 'MUSICAL'),
+    ('Mestres do Universo',                       'ACAO'), ('Mestres do Universo', 'FANTASIA'),
+    ('Super Mario Galaxy - O Filme',              'ANIMACAO'), ('Super Mario Galaxy - O Filme', 'AVENTURA'),
+    ('The Amazing Digital Circus: O Último Ato',  'ANIMACAO'), ('The Amazing Digital Circus: O Último Ato', 'FICCAO_CIENTIFICA'),
+    ('O Mandaloriano E Grogu',                    'ACAO'), ('O Mandaloriano E Grogu', 'FICCAO_CIENTIFICA'),
+    ('Obsessão',                                  'TERROR'),
+    ('Interstellar',                              'DRAMA'), ('Interstellar', 'FICCAO_CIENTIFICA'),
+    ('Good Omens 3',                              'DRAMA'),
+    ('Luigi`s Mansion - O Filme',                 'ANIMACAO'), ('Luigi`s Mansion - O Filme', 'AVENTURA'),
+    ('Caramelo - Um Filme Netflix',               'COMEDIA'), ('Caramelo - Um Filme Netflix', 'DRAMA'),
+    ('Avengers Endgame - Reboot 2026',            'ACAO'), ('Avengers Endgame - Reboot 2026', 'FICCAO_CIENTIFICA'),
+    ('Demon Slayer - Castelo Infinito',           'ACAO'), ('Demon Slayer - Castelo Infinito', 'ANIMACAO'),
+    ('Totoro',                                    'FANTASIA'), ('Totoro', 'AVENTURA'), ('Totoro', 'ANIMACAO')
+) AS fg(titulo_filme, genero)
+JOIN filme f ON f.titulo = fg.titulo_filme
+ON CONFLICT (id_filme, genero) DO NOTHING;
 
 -- Salas 
 -- No meu cinema só tem 2 salas 
@@ -164,18 +121,21 @@ WHERE NOT EXISTS (SELECT 1 FROM sala LIMIT 1);
 
 -- Assentos são gerados pelo SalaService.java no startup da aplicação
 
--- Sessões (inseridas apenas se a tabela estiver vazia)
+-- Sessões dos filmes
+-- ON CONFLICT caso o banco tente reinserir sessões idênticas que já existem
 INSERT INTO sessao (filme_id, sala_id, dt_sessao, horario, idioma)
-SELECT * FROM (VALUES
-    (1, 1, DATE '2026-05-27', TIME '14:00', 'LEGENDADO'),
-    (1, 1, DATE '2026-05-27', TIME '17:30', 'DUBLADO'),
-    (1, 2, DATE '2026-05-27', TIME '20:00', 'LEGENDADO'),
-    (1, 1, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
-    (1, 1, DATE '2026-05-28', TIME '19:00', 'LEGENDADO'),
-    (2, 1, DATE '2026-05-27', TIME '16:00', 'DUBLADO'),
-    (3, 2, DATE '2026-05-27', TIME '19:00', 'LEGENDADO'),
-    (6, 1, DATE '2026-05-31', TIME '18:00', 'LEGENDADO'),
-    (6, 2, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
-    (6, 2, DATE '2026-05-30', TIME '21:00', 'DUBLADO')
-) AS s(filme_id, sala_id, dt_sessao, horario, idioma)
-WHERE NOT EXISTS (SELECT 1 FROM sessao LIMIT 1);
+SELECT f.id, s.sala_id, s.dt_sessao, s.horario, s.idioma
+FROM (VALUES
+    ('BTS Arirang World Tour',                    1, DATE '2026-05-27', TIME '14:00', 'LEGENDADO'),
+    ('BTS Arirang World Tour',                    1, DATE '2026-05-27', TIME '17:30', 'DUBLADO'),
+    ('BTS Arirang World Tour',                    2, DATE '2026-05-27', TIME '20:00', 'LEGENDADO'),
+    ('BTS Arirang World Tour',                    1, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
+    ('BTS Arirang World Tour',                    1, DATE '2026-05-28', TIME '19:00', 'LEGENDADO'),
+    ('O Diabo Veste Prada 2',                     1, DATE '2026-05-27', TIME '16:00', 'DUBLADO'),
+    ('Michael',                                   2, DATE '2026-05-27', TIME '19:00', 'LEGENDADO'),
+    ('The Amazing Digital Circus: O Último Ato',  1, DATE '2026-05-31', TIME '18:00', 'LEGENDADO'),
+    ('The Amazing Digital Circus: O Último Ato',  2, DATE '2026-05-28', TIME '15:00', 'DUBLADO'),
+    ('The Amazing Digital Circus: O Último Ato',  2, DATE '2026-05-30', TIME '21:00', 'DUBLADO')
+) AS s(titulo_filme, sala_id, dt_sessao, horario, idioma)
+JOIN filme f ON f.titulo = s.titulo_filme
+ON CONFLICT (sala_id, dt_sessao, horario) DO NOTHING;

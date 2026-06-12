@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +14,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -78,19 +78,28 @@ public class MainController {
             @RequestParam("poster") MultipartFile poster,
             @RequestParam("bannerFile") MultipartFile bannerFile,
             Model model) throws IOException {
+
+        try{
+            // Salva o pôster e guarda o nome no objeto filme
+            String nomePoster = salvarArquivo(poster);
+            filme.setImagem(nomePoster);
  
-        // Salva o pôster e guarda o nome no objeto filme
-        String nomePoster = salvarArquivo(poster);
-        filme.setImagem(nomePoster);
+            // Salva o banner e guarda o nome no objeto filme
+            String nomeBanner = salvarArquivo(bannerFile);
+            filme.setBanner(nomeBanner);
  
-        // Salva o banner e guarda o nome no objeto filme
-        String nomeBanner = salvarArquivo(bannerFile);
-        filme.setBanner(nomeBanner);
+            FilmeService fs = context.getBean(FilmeService.class);
+            fs.inserirFilme(filme, generos);
  
-        FilmeService fs = context.getBean(FilmeService.class);
-        fs.inserirFilme(filme, generos);
- 
-        return "redirect:/admin/filmes";
+            return "redirect:/admin/filmes";
+            
+        } catch(DataIntegrityViolationException e){ //Exception ex funciona, mas esse é específico pro erro de DB (violação de integridade do banco)
+            model.addAttribute("erro", "ATENÇÃO: Não foi possível cadastrar, pois já existe um filme com este título!");
+            model.addAttribute("generos", FilmeGenero.values());
+            model.addAttribute("filme", filme); // Devolve o objeto para o admin não perder umas coisas que digitou
+
+            return "formfilme"; // Recarrega a página do formulário exibindo o erro
+        }
     }
 
     /*
@@ -203,10 +212,27 @@ public class MainController {
     @PostMapping("/admin/filme/{id}/editar")
     public String editarFilme(@PathVariable int id,
                                @ModelAttribute Filme filme,
-                               @RequestParam List<FilmeGenero> generos) {
-        FilmeService fs = context.getBean(FilmeService.class);
-        fs.atualizarFilme(id, filme, generos);
-        return "redirect:/admin/filmes";
+                               @RequestParam List<FilmeGenero> generos, Model model) {
+
+        try{
+            FilmeService fs = context.getBean(FilmeService.class);
+            fs.atualizarFilme(id, filme, generos);
+
+            return "redirect:/admin/filmes";
+
+        } catch (DataIntegrityViolationException e){
+
+            // Se cair aqui, o Admin tentou mudar o título para um nome que já existe no banco
+            model.addAttribute("erro", "Não foi possível atualizar: já existe outro filme com este título.");
+
+            // Estava com um pouco de dificuldade, optei por voltar o formulário ao que era e perder as edições
+            FilmeService fs = context.getBean(FilmeService.class);
+            Filme filmeAntigo = fs.obterFilme(id);
+            model.addAttribute("filme", filmeAntigo);
+            model.addAttribute("generos", FilmeGenero.values());
+
+            return "formeditarfilme"; // Devolve o usuário para a página de edição mostrando o alerta
+        }
     }
 
     // ========= Deletar filme :c =========
@@ -237,10 +263,26 @@ public class MainController {
 
     // Recebe o submit do formulário e insere a sessão no banco
     @PostMapping("/admin/sessao/cadastro")
-    public String cadastrarSessao(@ModelAttribute Sessao sessao) {
-        SessaoService ss = context.getBean(SessaoService.class);
-        ss.inserirSessao(sessao);
-        return "redirect:/admin/filmes";
+    public String cadastrarSessao(@ModelAttribute Sessao sessao, Model model) {
+
+        try{
+            SessaoService ss = context.getBean(SessaoService.class);
+            ss.inserirSessao(sessao);
+
+            return "redirect:/admin/filmes";
+
+        } catch(DataIntegrityViolationException e){
+            FilmeService fs = context.getBean(FilmeService.class);
+            SalaService sl = context.getBean(SalaService.class);
+
+            // Captura o erro caso já exista uma sessão idêntica (mesmo filme, sala, data, hora e idioma) 
+            model.addAttribute("erro", "Erro: esta sala já está ocupada nesse mesmo dia e horário!");
+            model.addAttribute("filmes", fs.obterTodosFilmes()); // Recarrega listas necessárias para o form
+            model.addAttribute("salas", sl.obterTodasSalas());
+            model.addAttribute("sessao", sessao);
+
+            return "formsessao"; 
+        }
     }
 
     // ========= PÁGINA DAS SESSÕES =========

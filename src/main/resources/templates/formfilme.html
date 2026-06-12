@@ -34,6 +34,11 @@
  
         <form action="#" th:action="@{/filme/cadastro}" method="post" th:object="${filme}" enctype="multipart/form-data" class="form-card">
  
+            <!-- Se a variável 'erro' existir no Model, exibe o alerta na tela -->
+            <div th:if="${erro}" class="alerta-erro">
+                <span th:text="${erro}"></span>
+            </div>
+
             <!-- ── CAMPOS SEMPRE VISÍVEIS ─────────────────────────── -->
 
             <div class="form-group">

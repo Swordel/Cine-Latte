@@ -33,6 +33,11 @@
 
     <form th:action="@{/admin/sessao/cadastro}" method="post" th:object="${sessao}" class="form-card">
 
+        <!-- Se a variável 'erro' existir no Model, exibe o alerta na tela -->
+            <div th:if="${erro}" class="alerta-erro">
+                <span th:text="${erro}"></span>
+            </div>
+
         <!-- Filme: dropdown populado pelo controller com todos os filmes do banco -->
         <div class="form-group">
             <label>Filme</label>

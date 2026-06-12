@@ -40,6 +40,11 @@
           th:object="${filme}"
           class="form-card">
 
+          <!-- Se a variável 'erro' existir no Model, exibe o alerta na tela -->
+            <div th:if="${erro}" class="alerta-erro">
+                <span th:text="${erro}"></span>
+            </div>
+
         <div class="form-group">
             <label>Título</label>
             <!-- th:field preenche o valor atual automaticamente -->
