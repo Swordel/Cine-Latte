@@ -92,6 +92,7 @@ main {
 .forma-tabs {
     display: flex;
     gap: 10px;
+    margin-top: 16px;
 }
 
 .forma-tab {
@@ -125,6 +126,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-top: 16px;
 }
 
 .painel-pagamento.hidden { display: none; }
@@ -259,6 +261,7 @@ input[type="text"]::placeholder { color: rgba(201,178,155,0.35); }
     transition: 0.3s;
     text-transform: uppercase;
     width: 100%;
+    margin-top: 24px;
 }
 
 .btn-confirmar:hover { background: #E8DCC6; }

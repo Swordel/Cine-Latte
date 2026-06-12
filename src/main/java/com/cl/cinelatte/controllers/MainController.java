@@ -499,10 +499,7 @@ public class MainController {
     }
 
     @PostMapping("/sessao/{id}/pagamento")
-    public String confirmarPagamento(@PathVariable int id,
-                                  @RequestParam FormaPagamento formaPagamento,
-                                  HttpSession session,
-                                  Model model) {
+    public String confirmarPagamento(@PathVariable int id, @RequestParam FormaPagamento formaPagamento, @RequestParam String nomeCliente, HttpSession session, Model model) {
 
         @SuppressWarnings("unchecked")
         List<Integer> assentoIds = (List<Integer>) session.getAttribute("assentoIds");
@@ -523,7 +520,7 @@ public class MainController {
         ReservaService rs = context.getBean(ReservaService.class);
 
         // Delega tudo ao Service: controller só passa os dados
-        rs.inserirReservaCompleta(id, assentoIds, qtdInteira, qtdMeia, formaPagamento);
+        rs.inserirReservaCompleta(id, assentoIds, qtdInteira, qtdMeia, formaPagamento, nomeCliente);
 
         // Limpa a sessão após a compra
         session.removeAttribute("assentoIds");

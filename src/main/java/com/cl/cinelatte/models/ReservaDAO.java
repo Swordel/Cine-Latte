@@ -29,12 +29,13 @@ public class ReservaDAO {
     // O NOW() retorna a data e hora atual do servidor no momento da execução da query
     // INSERT da reserva retorna o id gerado :9
     public int inserirReserva(Reserva reserva) {
-        String sql = "INSERT INTO reserva(sessao_id, dt_compra, valor_total, forma_pagamento, pago) VALUES (?, NOW(), ?, ?, ?)";
-        Object[] obj = new Object[4];
+        String sql = "INSERT INTO reserva(sessao_id, dt_compra, valor_total, forma_pagamento, pago, nome_cliente) VALUES (?, NOW(), ?, ?, ?, ?)";
+        Object[] obj = new Object[5];
         obj[0] = reserva.getSessaoId();
         obj[1] = reserva.getValorTotal();
         obj[2] = reserva.getFormaPagamento().name();
         obj[3] = reserva.isPago();
+        obj[4] = reserva.getNomeCliente();
         jdbc.update(sql, obj);
  
         String sqlId = "SELECT MAX(id) FROM reserva";
@@ -43,8 +44,7 @@ public class ReservaDAO {
     
      // INSERT de um item da reserva
     public void inserirReservaItem(ReservaItem item) {
-        String sql = "INSERT INTO reserva_item(reserva_id, assento_id, tipo_ingresso, valor) " +
-                     "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO reserva_item(reserva_id, assento_id, tipo_ingresso, valor) VALUES (?, ?, ?, ?)";
         Object[] obj = new Object[4];
         obj[0] = item.getReservaId();
         obj[1] = item.getAssentoId();

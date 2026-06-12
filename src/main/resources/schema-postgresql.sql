@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS reserva (
     dt_compra TIMESTAMP DEFAULT NOW(),
     valor_total NUMERIC(8,2),
     forma_pagamento VARCHAR(10),
-    pago BOOLEAN
+    pago BOOLEAN,
+    nome_cliente VARCHAR(100)
 );
 
 -- ReservaItem = cada assento dentro de uma compra

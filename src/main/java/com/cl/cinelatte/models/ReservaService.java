@@ -21,7 +21,7 @@ public class ReservaService {
     }
 
     // Valida, calcula e insere a reserva completa -> retorna a Reserva criada
-    public Reserva inserirReservaCompleta(int sessaoId, List<Integer> assentoIds, int qtdInteira, int qtdMeia, FormaPagamento formaPagamento) {
+    public Reserva inserirReservaCompleta(int sessaoId, List<Integer> assentoIds, int qtdInteira, int qtdMeia, FormaPagamento formaPagamento, String nomeCliente) {
 
         // == VALIDAÇÕES == :D
 
@@ -54,7 +54,7 @@ public class ReservaService {
         double valorTotal = calcularTotal(qtdInteira, qtdMeia);
 
         // == INSERÇÃO == ~
-        Reserva reserva = new Reserva(sessaoId, valorTotal, formaPagamento);
+        Reserva reserva = new Reserva(sessaoId, valorTotal, formaPagamento, nomeCliente);
         int reservaId = reservaDAO.inserirReserva(reserva);
         reserva.setId(reservaId);
  
