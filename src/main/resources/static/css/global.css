@@ -60,27 +60,26 @@ header{
 
 .login-btn{
     font-family: 'Lato', sans-serif;
-
     font-weight: 400;
-
     letter-spacing: 1px;
-    padding: 12px 28px;
-
+    padding: 8px 20px;
     border: 1px solid #C69C6D;
     background: transparent;
-
     color: #C69C6D;
-
     border-radius: 40px;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
 .login-btn:hover{
     background-color: #C69C6D;
     color: #E8DCC6;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 /* ── FOOTER ─────────────────────────────────────────────────── */

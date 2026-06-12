@@ -26,6 +26,10 @@ public class FilmeService {
         return filme;
     }
 
+    //SELECT todos filmes cadastrados
+    public List<Filme> obterTodosFilmes() {
+        return filmeDAO.obterTodosFilmes();
+    }
     
     // SELECT filmes por status
     public List<Filme> obterFilmesPorStatus(FilmeStatus status) {

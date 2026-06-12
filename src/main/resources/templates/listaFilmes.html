@@ -26,21 +26,24 @@
         </div>
     </div>
 
-    <div class="admin-wrapper" id="adminWrapper">
-        <img class="admin-avatar"
-             th:src="@{/images/adminphoto.png}"
-             alt="Admin"
-             id="adminAvatar">
-        <div class="admin-dropdown" id="adminDropdown">
-            <div class="admin-dropdown-header">
-                <img th:src="@{/images/adminphoto.png}" alt="Admin">
-                <span>Área do Administrador</span>
+    <div class="header-actions">
+        <a th:href="@{/}" class="login-btn">VOLTAR</a>
+
+        <div class="admin-wrapper" id="adminWrapper">
+            <img class="admin-avatar"
+                th:src="@{/images/adminphoto.png}"
+                alt="Admin"
+                id="adminAvatar">
+            <div class="admin-dropdown" id="adminDropdown">
+                <div class="admin-dropdown-header">
+                    <img th:src="@{/images/adminphoto.png}" alt="Admin">
+                    <span>Área do Administrador</span>
+                </div>
+                <div class="admin-dropdown-divider"></div>
+                <a class="admin-dropdown-item" th:href="@{/filme/cadastro}">Cadastrar Filme</a>
+                <a class="admin-dropdown-item" th:href="@{/admin/filmes}">Listar Filmes</a>
+                <a class="admin-dropdown-item" th:href="@{/admin/sessao/cadastro}">Cadastrar Sessão</a>
             </div>
-            <div class="admin-dropdown-divider"></div>
-            <a class="admin-dropdown-item" th:href="@{/filme/cadastro}">Cadastrar Filme</a>
-            <a class="admin-dropdown-item" th:href="@{/admin/filmes}">Listar Filmes</a>
-            <a class="admin-dropdown-item" href="#">Cadastrar Sessão</a>
-            <a class="admin-dropdown-item" href="#">Listar Sessões</a>
         </div>
     </div>
 </header>

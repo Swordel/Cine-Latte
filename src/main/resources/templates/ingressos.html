@@ -98,7 +98,7 @@
             <!-- Mini pôster + info do filme -->
             <div class="resumo-filme">
                 <img class="resumo-poster"
-                     th:src="@{/images/{img}(img=${filme.imagem})}"
+                     th:src="@{/uploads/{img}(img=${filme.imagem})}"
                      th:alt="${filme.titulo}">
                 <div class="resumo-filme-info">
                     <div class="resumo-filme-titulo" th:text="${filme.titulo}"></div>

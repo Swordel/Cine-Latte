@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Sessão — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/formfilme.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <a th:href="@{/}" class="login-btn">VOLTAR</a>
+</header>
+
+<!-- ========== FORMULÁRIO ========== -->
+<div class="form-wrapper">
+    <h2 class="form-title">Cadastro de Sessão</h2>
+
+    <form th:action="@{/admin/sessao/cadastro}" method="post" th:object="${sessao}" class="form-card">
+
+        <!-- Filme: dropdown populado pelo controller com todos os filmes do banco -->
+        <div class="form-group">
+            <label>Filme</label>
+            <!--
+                th:each gera uma <option> para cada filme da lista "filmes".
+                th:value envia o id (inteiro) e th:text mostra o título.
+                obs.: filmeId é int -> mesmo problema do status no formfilme.
+                th:field pré-selecionaria o primeiro filme automaticamente.
+                Uso name="filmeId" puro para o select começar vazio de verdade.
+            -->
+            <select name="filmeId" required>
+                <option value="" disabled selected>Selecione um filme...</option>
+                <option th:each="filme : ${filmes}"
+                        th:value="${filme.id}"
+                        th:text="${filme.titulo}">
+                </option>
+            </select>
+        </div>
+
+        <div class="form-row">
+
+            <!-- Sala: dropdown com as salas do banco -->
+            <div class="form-group">
+                <label>Sala</label>
+                
+                <select name="salaId" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option th:each="sala : ${salas}"
+                            th:value="${sala.id}"
+                            th:text="${sala.nome}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Idioma: fixo, vem do Enum SessaoIdioma -->
+            <div class="form-group">
+                <label>Idioma</label>
+                 <select th:field="*{idioma}" required>
+                    <option value="" disabled selected>Selecione...</option>
+                    <option value="LEGENDADO">Legendado</option>
+                    <option value="DUBLADO">Dublado</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-row">
+
+            <!-- Data da sessão -->
+            <div class="form-group">
+                <label>Data da Sessão</label>
+                <!--
+                    o Thymeleaf gera name="dt" e o Spring converte "yyyy-MM-dd" para
+                    LocalDate automaticamente no @ModelAttribute.
+                -->
+                <input type="date" th:field="*{dt}" required>
+            </div>
+
+            <!-- Horário da sessão -->
+            <div class="form-group">
+                <label>Horário</label>
+                <!--
+                    O Spring converte "HH:mm" para LocalTime
+                    quando o setter espera LocalTime.
+                -->
+                <input type="time" th:field="*{horario}" required>
+            </div>
+
+        </div>
+
+        <button type="submit" class="submit-btn">CADASTRAR SESSÃO</button>
+
+    </form>
+</div>
+
+</body>
+</html>

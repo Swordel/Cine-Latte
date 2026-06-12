@@ -63,6 +63,19 @@ public class FilmeDAO {
         return Filme.converterRegistros(registro);
     }
 
+    public List<Filme> obterTodosFilmes() {
+        String sql = "SELECT * FROM filme ORDER BY titulo";
+
+        List<Map<String, Object>> listaRegistros = jdbc.queryForList(sql);
+
+        List<Filme> aux = new ArrayList<>();
+        for (Map<String, Object> registro : listaRegistros) {
+            aux.add(Filme.converterRegistros(registro));
+        }
+        
+        return aux;
+    }
+
      // SELECT todos os filmes de um status (EM_CARTAZ ou EM_BREVE)
     public List<Filme> obterFilmesPorStatus(FilmeStatus status) {
         String sql = "SELECT * FROM filme WHERE status_filme = ? ORDER BY id";

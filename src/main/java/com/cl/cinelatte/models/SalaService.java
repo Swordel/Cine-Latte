@@ -1,5 +1,6 @@
 package com.cl.cinelatte.models;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,15 @@ public class SalaService {
                 assentoDAO.salvar(new Assento(salaId, String.valueOf(fileira), numero, tipo));
             }
         }
+    }
+
+    // Preciso de um método que busque todas as salas do banco
+    // para popular o dropdown do form de criar sessões
+    @Autowired
+    SalaDAO salaDAO; 
+ 
+    public List<Sala> obterTodasSalas() {
+        return salaDAO.obterTodasSalas();
     }
 
 }

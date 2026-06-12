@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,6 +36,7 @@ import com.cl.cinelatte.models.FilmeService;
 import com.cl.cinelatte.models.FilmeStatus;
 import com.cl.cinelatte.models.FormaPagamento;
 import com.cl.cinelatte.models.ReservaService;
+import com.cl.cinelatte.models.SalaService;
 import com.cl.cinelatte.models.Sessao;
 import com.cl.cinelatte.models.SessaoIdioma;
 import com.cl.cinelatte.models.SessaoService;
@@ -218,6 +220,28 @@ public class MainController {
         return "redirect:/admin/filmes";
     }
 
+    //     ===== CADASTRO DE SESSÕES ===
+    // Exibe o formulário de cadastro de sessão
+    // Precisa mandar pro model: todos os filmes (para o dropdown)
+    // e todas as salas (para o dropdown de sala)
+    @GetMapping("/admin/sessao/cadastro")
+    public String formSessao(Model model) {
+        FilmeService fs = context.getBean(FilmeService.class);
+        SalaService sl = context.getBean(SalaService.class);
+ 
+        model.addAttribute("sessao", new Sessao());        // ancora o th:object
+        model.addAttribute("filmes", fs.obterTodosFilmes()); 
+        model.addAttribute("salas", sl.obterTodasSalas());
+        return "formsessao";
+    }
+
+    // Recebe o submit do formulário e insere a sessão no banco
+    @PostMapping("/admin/sessao/cadastro")
+    public String cadastrarSessao(@ModelAttribute Sessao sessao) {
+        SessaoService ss = context.getBean(SessaoService.class);
+        ss.inserirSessao(sessao);
+        return "redirect:/admin/filmes";
+    }
 
     // ========= PÁGINA DAS SESSÕES =========
     /* Anotações da Gaby:
