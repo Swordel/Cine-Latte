@@ -71,4 +71,35 @@ public class ReservaDAO {
         return aux;
     }
 
+    // SELECT todas as reservas, mais recentes primeiro
+    public List<Reserva> obterTodasReservas() {
+        String sql = "SELECT * FROM reserva ORDER BY dt_compra DESC";
+        List<Map<String, Object>> lista = jdbc.queryForList(sql);
+        List<Reserva> aux = new ArrayList<>();
+        for (Map<String, Object> r : lista) {
+            aux.add(Reserva.converterRegistros(r));
+        }
+        return aux;
+    }
+
+    // SELECT itens de uma reserva específica
+    public List<ReservaItem> obterItensDaReserva(int reservaId) {
+        String sql = "SELECT * FROM reserva_item WHERE reserva_id = ?";
+
+        List<Map<String, Object>> lista = jdbc.queryForList(sql, reservaId);
+
+        List<ReservaItem> aux = new ArrayList<>();
+        
+        for (Map<String, Object> r : lista) {
+            int id = (int) r.get("id");
+            int resId = (int) r.get("reserva_id");
+            int assentoId = (int) r.get("assento_id");
+            TipoIngresso tipo = TipoIngresso.valueOf((String) r.get("tipo_ingresso"));
+            double valor = ((Number) r.get("valor")).doubleValue();
+            aux.add(new ReservaItem(id, resId, assentoId, tipo, valor));
+        }
+
+        return aux;
+    }
+
 }

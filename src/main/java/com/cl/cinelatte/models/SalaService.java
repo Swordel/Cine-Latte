@@ -71,4 +71,9 @@ public class SalaService {
         return salaDAO.obterTodasSalas();
     }
 
+    //obter sala pra mostrar nas reservas
+    public Sala obterSala(int id) {
+        return salaDAO.obterSala(id);
+    }
+
 }

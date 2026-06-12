@@ -63,4 +63,18 @@ public class AssentoDAO {
         return Assento.converterRegistros(registro);
     }
 
+    // Busca os assentos de uma reserva via JOIN com reserva_item
+    public List<Assento> obterAssentosDaReserva(int reservaId) {
+        String sql = "SELECT a.* FROM assento a " +
+                     "JOIN reserva_item ri ON ri.assento_id = a.id " +
+                     "WHERE ri.reserva_id = ? " +
+                     "ORDER BY a.fileira, a.numero";
+        List<Map<String, Object>> lista = jdbc.queryForList(sql, reservaId);
+        List<Assento> aux = new ArrayList<>();
+        for (Map<String, Object> r : lista) {
+            aux.add(Assento.converterRegistros(r));
+        }
+        return aux;
+    }
+
 }

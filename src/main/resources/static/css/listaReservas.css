@@ -1,0 +1,257 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1E1612;
+    font-family: 'Montserrat', sans-serif;
+    color: #F5EBDD;
+    padding-top: 90px;
+}
+
+/* ── LAYOUT PRINCIPAL ───────────────────────────────────────── */
+.reservas-main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+}
+
+.reservas-topo {
+    margin-bottom: 28px;
+}
+
+.reservas-titulo {
+    font-size: 24px;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.reservas-subtitulo {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #C9B29B;
+}
+
+/* ── ABAS ───────────────────────────────────────────────────── */
+.reservas-tabs {
+    display: flex;
+    border-bottom: 1.5px solid rgba(198, 156, 109, 0.12);
+    margin-bottom: 28px;
+}
+
+.reservas-tab {
+    font-size: 14px;
+    font-weight: 400;
+    padding: 14px 20px;
+    color: #C9B29B;
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -1.5px;
+    letter-spacing: 0.5px;
+}
+
+.reservas-tab.active {
+    color: #F5EBDD;
+    border-bottom-color: #7A8B74;
+    font-weight: 500;
+}
+
+/* ── LISTA DE CARDS ─────────────────────────────────────────── */
+.reservas-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── CARD ───────────────────────────────────────────────────── */
+.reserva-card {
+    background: rgba(75, 54, 33, 0.12);
+    border: 1px solid rgba(198, 156, 109, 0.12);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Topo: código de busca */
+.reserva-codigo {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #C9B29B;
+    letter-spacing: 0.5px;
+    padding: 12px 20px;
+    background: rgba(75, 54, 33, 0.2);
+    border-bottom: 1px solid rgba(198, 156, 109, 0.08);
+}
+
+.reserva-codigo span {
+    color: #F5EBDD;
+}
+
+/* Corpo: pôster + infos + botão */
+.reserva-corpo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 20px;
+}
+
+/* Pôster pequeno */
+.reserva-poster {
+    width: 72px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+    border: 1px solid rgba(198, 156, 109, 0.15);
+}
+
+/* Infos da sessão */
+.reserva-sessao-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.reserva-titulo-filme {
+    font-size: 15px;
+    font-weight: 500;
+    color: #F5EBDD;
+}
+
+.reserva-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #C9B29B;
+}
+
+.reserva-meta i {
+    color: #7A8B74;
+    font-size: 12px;
+    width: 14px;
+    text-align: center;
+}
+
+.reserva-idioma-badge {
+    display: inline-block;
+    font-family: 'Lato', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(122, 139, 116, 0.18);
+    color: #7A8B74;
+    border: 1px solid rgba(122, 139, 116, 0.3);
+    align-self: flex-start;
+}
+
+/* Botão ver detalhes */
+.ver-detalhes-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: #C69C6D;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 6px 0;
+    transition: color 0.2s;
+    letter-spacing: 0.3px;
+}
+
+.ver-detalhes-btn:hover {
+    color: #F5EBDD;
+}
+
+.ver-detalhes-btn i {
+    font-size: 11px;
+    transition: transform 0.25s;
+}
+
+/* Ícone rotaciona quando expandido */
+.ver-detalhes-btn.aberto i {
+    transform: rotate(180deg);
+}
+
+/* ── DETALHES EXPANDÍVEIS ───────────────────────────────────── */
+.reserva-detalhes {
+    border-top: 1px solid rgba(198, 156, 109, 0.1);
+    padding: 20px;
+}
+
+/* Grade 2 colunas para os detalhes */
+.detalhes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 32px;
+    margin-bottom: 18px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(198, 156, 109, 0.08);
+}
+
+.detalhes-rodape {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.detalhe-label {
+    font-family: 'Lato', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #F5EBDD;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.detalhe-label i {
+    color: #7A8B74;
+    width: 14px;
+    text-align: center;
+}
+
+.detalhe-valor {
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    color: #C9B29B;
+    padding-left: 21px; /* alinha com o texto depois do ícone */
+}
+
+.detalhe-codigo-pedido {
+    font-size: 11px;
+    word-break: break-all;
+}
+
+.detalhe-total .detalhe-valor {
+    font-size: 14px;
+    font-weight: 700;
+    color: #F5EBDD;
+}
+
+/* Mensagem vazia */
+.sem-reservas {
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    color: #C9B29B;
+    text-align: center;
+    padding: 60px 0;
+    opacity: 0.6;
+}

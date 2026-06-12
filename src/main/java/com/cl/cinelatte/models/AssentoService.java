@@ -27,4 +27,8 @@ public class AssentoService {
         return assentos;
     }
 
+    public List<Assento> obterAssentosDaReserva(int reservaId) {
+        return assentoDAO.obterAssentosDaReserva(reservaId);
+    }
+
 }

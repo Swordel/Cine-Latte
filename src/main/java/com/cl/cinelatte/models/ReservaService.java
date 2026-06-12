@@ -77,4 +77,12 @@ public class ReservaService {
         return reservaDAO.obterAssentosOcupadosPorSessao(sessaoId);
     }
 
+     public List<Reserva> obterTodasReservas() {
+        return reservaDAO.obterTodasReservas();
+    }
+
+    public List<ReservaItem> obterItensDaReserva(int reservaId) {
+        return reservaDAO.obterItensDaReserva(reservaId);
+    }
+
 }

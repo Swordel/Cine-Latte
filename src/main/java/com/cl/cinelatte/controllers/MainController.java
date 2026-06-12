@@ -35,7 +35,11 @@ import com.cl.cinelatte.models.FilmeGenero;
 import com.cl.cinelatte.models.FilmeService;
 import com.cl.cinelatte.models.FilmeStatus;
 import com.cl.cinelatte.models.FormaPagamento;
+import com.cl.cinelatte.models.Reserva;
+import com.cl.cinelatte.models.ReservaDetalhe;
+import com.cl.cinelatte.models.ReservaItem;
 import com.cl.cinelatte.models.ReservaService;
+import com.cl.cinelatte.models.Sala;
 import com.cl.cinelatte.models.SalaService;
 import com.cl.cinelatte.models.Sessao;
 import com.cl.cinelatte.models.SessaoIdioma;
@@ -534,6 +538,33 @@ public class MainController {
     @GetMapping("/sessao/{id}/confirmacao")
     public String confirmacao() {
         return "confirmacao";
-    }   
+    }  
+
+    // PÁGINA DAS RESERVAS
+    @GetMapping("/admin/reservas")
+    public String listarReservas(Model model) {
+        ReservaService rs = context.getBean(ReservaService.class);
+        SessaoService ss = context.getBean(SessaoService.class);
+        FilmeService fs = context.getBean(FilmeService.class);
+        SalaService salas = context.getBean(SalaService.class);
+        AssentoService as = context.getBean(AssentoService.class);
+ 
+        List<Reserva> reservas = rs.obterTodasReservas();
+        List<ReservaDetalhe> detalhes = new ArrayList<>();
+ 
+        for (Reserva reserva : reservas) {
+            Sessao sessao = ss.obterSessao(reserva.getSessaoId());
+            Filme filme = fs.obterFilme(sessao.getFilmeId());
+            Sala sala = salas.obterSala(sessao.getSalaId());
+            List<Assento> assentos = as.obterAssentosDaReserva(reserva.getId());
+            List<ReservaItem> itens = rs.obterItensDaReserva(reserva.getId());
+ 
+            detalhes.add(new ReservaDetalhe(reserva, sessao, filme, sala, assentos, itens));
+        }
+ 
+        model.addAttribute("reservasDetalhadas", detalhes);
+
+        return "listaReservas";
+    }
 
 }

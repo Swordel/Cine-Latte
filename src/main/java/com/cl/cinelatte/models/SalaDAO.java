@@ -39,4 +39,11 @@ public class SalaDAO {
         return salas;
     }
 
+    //select de sala por id pra mostrar na página de reservas
+    public Sala obterSala(int id) {
+        String sql = "SELECT * FROM sala WHERE id = ?";
+        Map<String, Object> r = jdbc.queryForMap(sql, id);
+        return new Sala((int) r.get("id"), (String) r.get("nome")); //converter registro já mandando o objeto (só tem 2 atributos mesmo u.u)
+    }
+
 }

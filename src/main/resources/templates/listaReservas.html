@@ -1,0 +1,280 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas — Cine Latte</title>
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/listaReservas.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+    <div class="logo-area">
+        <div class="logo">
+            <img th:src="@{/images/logo.png}" alt="Logo Cine Latte">
+        </div>
+        <div>
+            <h1>CINE LATTE</h1>
+            <p>Bom filme. Bom café. Boa companhia.</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a th:href="@{/}" class="login-btn">VOLTAR</a>
+        <div class="admin-wrapper" id="adminWrapper">
+            <img class="admin-avatar" th:src="@{/images/adminphoto.png}" alt="Admin" id="adminAvatar">
+            <div class="admin-dropdown" id="adminDropdown">
+                <div class="admin-dropdown-header">
+                    <img th:src="@{/images/adminFoto.jpg}" alt="Admin">
+                    <span>Área do Administrador</span>
+                </div>
+                <div class="admin-dropdown-divider"></div>
+                <a class="admin-dropdown-item" th:href="@{/filme/cadastro}">Cadastrar Filme</a>
+                <a class="admin-dropdown-item" th:href="@{/admin/filmes}">Listar Filmes</a>
+                <a class="admin-dropdown-item" th:href="@{/admin/sessao/cadastro}">Cadastrar Sessão</a>
+                <a class="admin-dropdown-item" th:href="@{/admin/reservas}">Reservas</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ========== CONTEÚDO ========== -->
+<main class="reservas-main">
+
+    <div class="reservas-topo">
+        <h2 class="reservas-titulo">Reservas</h2>
+        <p class="reservas-subtitulo">Aqui ficam os ingressos comprados. Navegue pela página para encontrar os pedidos.</p>
+    </div>
+
+    <!-- Aba histórico -->
+    <div class="reservas-tabs">
+        <div class="reservas-tab active">Histórico</div>
+    </div>
+
+    <!-- Lista de reservas -->
+    <div class="reservas-lista">
+
+        <!--
+            Cada ReservaDetalhe agrega: Reserva + Sessao + Filme + List<Assento>
+        -->
+
+        <div class="reserva-card" th:each="rd : ${reservasDetalhadas}">
+
+            <!-- Topo do card: código da reserva -->
+            <div class="reserva-codigo">
+                Código de busca: <span th:text="${rd.reserva.id}"></span>
+            </div>
+
+            <!-- Corpo principal: pôster + infos da sessão -->
+            <div class="reserva-corpo">
+
+                <!-- Pôster -->
+                <img class="reserva-poster"
+                     th:src="@{/uploads/{img}(img=${rd.filme.imagem})}"
+                     th:alt="${rd.filme.titulo}">
+
+                <!-- Infos da sessão -->
+                <div class="reserva-sessao-info">
+
+                    <div class="reserva-titulo-filme" th:text="${rd.filme.titulo}"></div>
+
+                    <div class="reserva-meta">
+                        <i class="fa-regular fa-calendar"></i>
+                    
+                        <span th:text="${rd.sessao.dataFormatada} + ' | ' + ${rd.sessao.horarioFormatado}"></span>
+                    </div>
+
+                    <div class="reserva-meta">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span th:text="${rd.sala.nome}"></span>
+                    </div>
+
+                    <span class="reserva-idioma-badge"
+                          th:text="${rd.sessao.idioma.name()}">
+                    </span>
+
+                </div>
+
+                <!-- Botão ver detalhes -->
+                <button class="ver-detalhes-btn" th:onclick="|toggleDetalhes(this)|">
+                    ver detalhes <i class="fa-solid fa-chevron-down"></i>
+                </button>
+
+            </div>
+
+            <!-- Detalhes expandíveis (escondidos por padrão) -->
+            <div class="reserva-detalhes" style="display:none;">
+
+                <div class="detalhes-grid">
+
+                    <!-- Coluna esquerda -->
+                    <div class="detalhe-item">
+                        <div class="detalhe-label">
+                            <i class="fa-solid fa-couch"></i> Assentos Escolhidos:
+                        </div>
+                        <div class="detalhe-valor">
+                            <!--
+                                rd.assentos é uma List<Assento>.
+                                getCodigo() retorna "A1", "C5", etc.
+                                th:each com separador vírgula.
+                            -->
+                            <span th:each="assento, i : ${rd.assentos}">
+                                <span th:if="${!i.first}">, </span>
+                                <span th:text="${assento.codigo}"></span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Coluna direita -->
+                    <div class="detalhe-item">
+                        <div class="detalhe-label">
+                            <i class="fa-solid fa-user"></i> Dados do cliente:
+                        </div>
+                        <div class="detalhe-valor">
+                            Nome: <span th:text="${rd.reserva.nomeCliente}"></span>
+                        </div>
+                    </div>
+
+                    <div class="detalhe-item">
+                        <div class="detalhe-label">
+                            <i class="fa-solid fa-ticket"></i> Tipos de Ingresso:
+                        </div>
+                        <div class="detalhe-valor">
+                            <!--
+                                rd.itens é uma List<ReservaItem>.
+                                Agrupa quantos INTEIRA e quantos MEIA.
+                            -->
+                            <span th:if="${rd.qtdInteira > 0}"
+                                  th:text="'(' + ${rd.qtdInteira} + ') Inteira'"></span>
+                            <span th:if="${rd.qtdInteira > 0 and rd.qtdMeia > 0}"> · </span>
+                            <span th:if="${rd.qtdMeia > 0}"
+                                  th:text="'(' + ${rd.qtdMeia} + ') Meia'"></span>
+                        </div>
+                    </div>
+
+                    <div class="detalhe-item">
+                        <div class="detalhe-label">
+                            <i class="fa-regular fa-clock"></i>
+                            <span th:text="${rd.reserva.dtCompra}"></span>
+                        </div>
+                        <div class="detalhe-valor detalhe-codigo-pedido">
+                            Nº do pedido: <span th:text="${rd.reserva.id}"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="detalhes-rodape">
+
+                    <div class="detalhe-item">
+                        <div class="detalhe-label">
+                            <i class="fa-solid fa-credit-card"></i> Forma de pagamento:
+                        </div>
+                        <div class="detalhe-valor" th:text="${rd.reserva.formaPagamento.name()}"></div>
+                    </div>
+
+                    <div class="detalhe-item detalhe-total">
+                        <div class="detalhe-label">
+                            <i class="fa-solid fa-circle-dollar-to-slot"></i> Total da compra:
+                        </div>
+                        <div class="detalhe-valor"
+                             th:text="'R$ ' + ${#numbers.formatDecimal(rd.reserva.valorTotal, 1, 2)}">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mensagem se não houver reservas -->
+        <p class="sem-reservas" th:if="${reservasDetalhadas.empty}">
+            Nenhuma reserva encontrada.
+        </p>
+
+    </div>
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="footer-grid">
+
+        <!-- Coluna 1 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Fique por dentro</h4>
+            <p class="footer-col-desc">Receba ofertas especiais, dicas de filmes e novidades do Cine Latte.</p>
+            <div class="footer-email">
+                <input type="email" placeholder="Seu e-mail">
+                <button>→</button>
+            </div>
+            <div class="footer-social">
+                <span>Siga-nos</span>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Links rápidos</h4>
+            <ul class="footer-links">
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Em Cartaz</a></li>
+                <li><a href="#">Em Breve</a></li>
+                <li><a href="#">Cardápio</a></li>
+                <li><a href="#">Sobre nós</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Atendimento</h4>
+            <ul class="footer-links">
+                <li><a href="#">Perguntas frequentes</a></li>
+                <li><a href="#">Política de ingressos</a></li>
+                <li><a href="#">Trocas e cancelamentos</a></li>
+                <li><a href="#">Termos e condições</a></li>
+                <li><a href="#">Privacidade</a></li>
+            </ul>
+        </div>
+
+        <!-- Coluna 4 -->
+        <div class="footer-col">
+            <h4 class="footer-col-title">Contato</h4>
+            <ul class="footer-contact">
+                <li>
+                    <i class="fa-solid fa-phone contact-icon"></i>
+                    (13) 99999-9999
+                </li>
+                <li>
+                    <i class="fa-solid fa-envelope contact-icon"></i>
+                    contato@cinelatte.com.br
+                </li>
+                <li>
+                    <i class="fa-solid fa-location-dot contact-icon"></i>
+                    Rua do Cinema, 123 <br> Santos, SP
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>LUZES BAIXAS, CAFÉ ALTO NÍVEL.</p>
+        <br>
+        <p>© 2026 Cine Latte · Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+<script th:src="@{/js/adminMenu.js}"></script>
+<script th:src="@{/js/listaReservas.js}"></script>
+
+</body>
+</html>
