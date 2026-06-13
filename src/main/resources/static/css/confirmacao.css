@@ -127,3 +127,30 @@ main {
 }
 
 .btn-inicio:hover { background: #E8DCC6; }
+
+.confirmacao-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-reservas {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    padding: 14px 40px;
+    background: #C69C6D;
+    color: #1E1612;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.btn-reservas:hover { background: #E8DCC6; }

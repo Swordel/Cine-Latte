@@ -60,8 +60,10 @@
             Seu ingresso foi reservado com sucesso.<br>Apresente o número do pedido na bilheteria.
         </p>
 
-        <a th:href="@{/}" class="btn-inicio">Voltar ao início</a>
-
+        <div class="confirmacao-btns">
+            <a th:href="@{/}" class="btn-inicio">Voltar ao início</a>
+            <a th:href="@{/admin/reservas}" class="btn-reservas">Visualizar reservas</a>
+        </div>
     </div>
 
 </main>
