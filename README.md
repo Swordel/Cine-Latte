@@ -129,7 +129,7 @@ sala
 **1. Clone o repositório**
 ```bash
 git clone https://github.com/Swordel/Cine-Latte.git
-cd cinelatte
+cd cine-latte
 ```
 
 **2. Crie o banco de dados**

@@ -76,7 +76,7 @@ VALUES
     ('Michael', 'SINOPSE 3', 127, '12', 'cartazMichael.webp', 'bannerMichael.png', 'EM_CARTAZ', NULL),
     ('Mestres do Universo', 'SINOPSE 4', 123, '14', 'cartazMestres.jpg', 'bannerMestres.webp', 'EM_CARTAZ', NULL),
     ('Super Mario Galaxy - O Filme', 'SINOPSE 5', 99, 'L', 'cartazMario.jpeg', 'bannerMario.webp', 'EM_CARTAZ', NULL),
-    ('KPop Demon Hunters', 'SINOPSE 6', 120, 'L', 'cartazKpop.jpg', 'bannerKpop.png', 'EM_CARTAZ', NULL),
+    ('KPop Demon Hunters', 'SINOPSE 6', 120, 'L', 'cartazKpop.jpg', 'bannerKpop.jpg', 'EM_CARTAZ', NULL),
     ('O Mandaloriano E Grogu', 'SINOPSE 7', 132, '14', 'cartazMandalorian.jpg', 'bannerMandalorian.webp', 'EM_CARTAZ', NULL),
     ('Obsessão', 'SINOPSE 8', 108, '18', 'cartazObs.jpg', NULL, 'EM_CARTAZ', NULL),
     ('Interstellar', 'SINOPSE 9', 169, '10', 'cartazInterstellar.jpg', 'bannerInterstellar.webp', 'EM_CARTAZ', NULL),
