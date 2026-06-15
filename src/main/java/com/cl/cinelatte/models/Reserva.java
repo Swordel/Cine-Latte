@@ -1,6 +1,7 @@
 package com.cl.cinelatte.models;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 // POJO - Plain Old Java Object
@@ -106,6 +107,8 @@ public class Reserva {
         this.nomeCliente = nomeCliente;
     }
 
-
+    public String getDtCompraFormatada() {
+        return dtCompra.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    }
 
 }
